@@ -14,10 +14,10 @@ const Login: React.FC = () => {
                             alt="icon"
                             width={60}
                         />
-                        <TextAnimate>Scan2Pay</TextAnimate>
+                        <TextAnimate>Scan2Pay Merchant</TextAnimate>
                     </div>
                     <TextAnimate className="font-semibold mt-3">
-                        Swap INR(₹) ↔ USDC/USDT currency instantly
+                        Sell your USDT/USDC ↔ INR(₹) Instantly
                     </TextAnimate>
                 </div>
                 <div className="my-10 sm:my-15">

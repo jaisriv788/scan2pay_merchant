@@ -323,7 +323,7 @@ export function LoginDialog() {
         >
             <DialogTrigger asChild>
                 <Button className="w-full text-white bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300">
-                    Login
+                    MerchantLogin
                 </Button>
             </DialogTrigger>
 
