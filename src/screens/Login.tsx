@@ -30,7 +30,7 @@ const Login: React.FC = () => {
                         <span
                             onClick={() =>
                             (window.location.href =
-                                "https://scan2pay.direct/terms-and-conditions")
+                                "https://scan2pay.direct/terms&condition")
                             }
                             className="cursor-pointer font-semibold text-[#4D43EF] hover:text-[#1206f3] transition ease-in-out duration-300"
                         >
