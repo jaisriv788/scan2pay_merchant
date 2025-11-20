@@ -60,6 +60,7 @@ export function LoginDialog() {
             setLoadingButton("google");
             const response = await axios.post(`${baseUrl}/auth/google`, {
                 referred_id: id ? id : "",
+                isMerchant: true
             });
 
             if (response.status !== 200) {
@@ -85,6 +86,7 @@ export function LoginDialog() {
             setLoadingButton("github");
             const response = await axios.post(`${baseUrl}/auth/github`, {
                 referred_id: id ? id : "",
+                isMerchant: true
             });
 
             if (response.status !== 200) {
@@ -197,6 +199,7 @@ export function LoginDialog() {
                 email,
                 otp,
                 referred_id: id ? id : "",
+                isMerchant: true
             });
 
             // console.log(response.data);
@@ -267,6 +270,7 @@ export function LoginDialog() {
                 phone_no: number,
                 otp,
                 referred_id: id ? id : "",
+                isMerchant: true
             });
 
             // console.log(response.data);
@@ -323,7 +327,7 @@ export function LoginDialog() {
         >
             <DialogTrigger asChild>
                 <Button className="w-full text-white bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300">
-                    MerchantLogin
+                    Merchant Login
                 </Button>
             </DialogTrigger>
 
