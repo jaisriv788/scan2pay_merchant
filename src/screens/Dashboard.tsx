@@ -1,20 +1,62 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MagicCard } from "@/components/ui/magic-card";
+import type { RootState } from "@/store/store";
+import axios from "axios";
 import { Sparkles, Wallet, CircleDollarSign, BarChart3, Receipt } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface DashboardProps {
     usdtAmount?: number;
     usdcAmount?: number;
     transactionCount?: number;
-    totalBusiness?: number;
+    walletAddress?: number;
 }
 
-export default function DashboardPage({
-    usdtAmount = 0,
-    usdcAmount = 0,
-    transactionCount = 0,
-    totalBusiness = 0,
-}: DashboardProps) {
+export default function DashboardPage() {
+    const [loading, setloading] = useState(false);
+    const [data, setData] = useState<DashboardProps | null>(null);
+
+    const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
+    const token = useSelector((state: RootState) => state?.user?.token);
+
+
+    async function fetchData() {
+        try {
+            setloading(true);
+            const response = await axios.post(
+                `${baseUrl}/merchant/index`, {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            console.log(response.data.data);
+
+            if (response.data.status == "false") {
+                setData(null);
+                return;
+            }
+
+            setData({
+                usdtAmount: response.data.data.usdt_amount,
+                usdcAmount: response.data.data.usdc_amount,
+                transactionCount: response.data.data.total_transactions,
+                walletAddress: response.data.data.wallet_address,
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setloading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+        // console.log(transaction.length)
+    }, []);
     return (
         <div className="mt-24 px-3 flex flex-col gap-8 max-w-lg mx-auto">
 
@@ -48,7 +90,7 @@ export default function DashboardPage({
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                            ${usdtAmount.toFixed(2)}
+                            ${data?.usdtAmount ?? 0}
                         </p>
                     </CardContent>
                 </MagicCard>
@@ -70,7 +112,7 @@ export default function DashboardPage({
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                            ${usdcAmount.toFixed(2)}
+                            ${data?.usdcAmount ?? 0}
                         </p>
                     </CardContent>
                 </MagicCard>
@@ -92,7 +134,7 @@ export default function DashboardPage({
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                            {transactionCount}
+                            {data?.transactionCount ?? 0}
                         </p>
                     </CardContent>
                 </MagicCard>
@@ -114,7 +156,7 @@ export default function DashboardPage({
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                            ${totalBusiness.toFixed(2)}
+                            ${data?.walletAddress ?? 0}
                         </p>
                     </CardContent>
                 </MagicCard>

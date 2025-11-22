@@ -18,6 +18,7 @@ import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { ImConnection } from "react-icons/im";
 import { useNavigate } from "react-router";
 import { setLimit } from "@/store/slices/priceSlice";
+import axios from "axios";
 // import ThemeSwitcher from "./ThemeSwitcher";
 
 const Sidebar: React.FC = () => {
@@ -80,6 +81,8 @@ const Sidebar: React.FC = () => {
     github: "Github Auth",
   };
 
+  const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
+  const token = useSelector((state: RootState) => state?.user?.token);
   const userData = useSelector((state: RootState) => state.user.userData);
   const isSideBarVisible = useSelector(
     (state: RootState) => state.model.showSidebar
@@ -90,14 +93,27 @@ const Sidebar: React.FC = () => {
     dispatch(setSidebar({ showSidebar: false }));
   }
 
-  function handleLogout() {
-    dispatch(
-      setLimit({
-        limit: null,
-      })
-    );
-    dispatch(signout());
-    handleClose();
+  async function handleLogout() {
+    try {
+      await axios.post(
+        `${baseUrl}/logout`, {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch(
+        setLimit({
+          limit: null,
+        })
+      );
+      dispatch(signout());
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

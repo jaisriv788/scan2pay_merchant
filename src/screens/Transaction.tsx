@@ -48,7 +48,7 @@ const Transaction: React.FC = () => {
                     },
                 }
             );
-            // console.log(response.data.data);
+            console.log(response.data.data);
 
             if (response.data.status == "false") {
                 setTransaction([]);
@@ -112,7 +112,7 @@ const Transaction: React.FC = () => {
                                 <TableRow>
                                     <TableHead>Trx Id</TableHead>
                                     <TableHead>Trx Type</TableHead>
-                                    <TableHead>Type</TableHead>
+                                    {/* <TableHead>Type</TableHead> */}
                                     <TableHead>Amount</TableHead>
                                     <TableHead className="text-center">Hash</TableHead>
                                 </TableRow>
@@ -125,9 +125,9 @@ const Transaction: React.FC = () => {
                                             key={index}
                                         >
                                             <TableCell>{item?.trans_id ?? "-"}</TableCell>
-                                            <TableCell className="text-center">
+                                            {/* <TableCell className="text-center">
                                                 {item?.payment_method?.toString()?.toUpperCase() ?? "-"}
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell>
                                                 {item?.type[0].toUpperCase() + item?.type.slice(1)}
                                             </TableCell>
