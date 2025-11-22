@@ -199,8 +199,7 @@ export function LoginDialog() {
             const response = await axios.post(`${baseUrl}/register-email`, {
                 email,
                 otp,
-                referred_id: id ? id : "",
-                isMerchant: true
+                isMerchant: 1
             });
 
             // console.log(response.data);
