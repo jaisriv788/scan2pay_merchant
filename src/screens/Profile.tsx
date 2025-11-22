@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import { useShowSuccess } from "@/hooks/useShowSuccess";
+import { useShowError } from "@/hooks/useShowError";
 
 export default function ProfilePage() {
     const [email, setEmail] = useState("");
@@ -15,11 +17,15 @@ export default function ProfilePage() {
     const [accNumber, setAccNumber] = useState("");
     const [bankName, setBankName] = useState("");
     const [reload, setReload] = useState(false);
+    const [upiLoading, setUpiLoading] = useState(false);
+    const [bankLoading, setBankLoading] = useState(false);
 
     const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
     const userData = useSelector((state: RootState) => state?.user?.userData);
     const token = useSelector((state: RootState) => state?.user?.token);
 
+    const { showSuccess } = useShowSuccess();
+    const { showError } = useShowError();
 
     useEffect(() => {
         const getUserData = async () => {
@@ -54,6 +60,7 @@ export default function ProfilePage() {
 
     const saveUPI = async () => {
         try {
+            setUpiLoading(true);
             console.log(typeof upi, upi)
             const response = await axios.post(
                 `${baseUrl}/merchant/update-upi`,
@@ -71,14 +78,19 @@ export default function ProfilePage() {
             console.log(response)
             if (response.data.status) {
                 setReload((prev) => !prev);
+                showSuccess("Upi Updated Successfully", "")
             }
         } catch (error) {
             console.log(error)
+            showError("Upi Update Failed", "")
+        } finally {
+            setUpiLoading(false);
         }
     };
 
     const saveBankDetails = async () => {
         try {
+            setBankLoading(true);
             const response = await axios.post(
                 `${baseUrl}/merchant/update-bank`,
                 {
@@ -95,15 +107,21 @@ export default function ProfilePage() {
                 }
             );
             console.log(response)
-
+            if (response.data.status) {
+                setReload((prev) => !prev);
+                showSuccess("Bank Details Updated Successfully", "")
+            }
         } catch (error) {
             console.log(error)
+            showError("Bank Details Update Failed", "")
+        } finally {
+            setBankLoading(false);
         }
     };
 
     return (
-        <div className="mt-20 px-2 flex flex-col gap-4 max-w-lg mx-auto">
-            <div className="border rounded-lg p-5 bg-[#4D43EF]/10 flex flex-col gap-5">
+        <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
+            <div className="border rounded-lg px-5 py-2 bg-[#4D43EF]/10 flex flex-col gap-3">
                 <h2 className="text-xl font-semibold text-center">Profile</h2>
 
                 {/* Email */}
@@ -140,8 +158,9 @@ export default function ProfilePage() {
                     <Button
                         className="bg-[#4D43EF] hover:bg-[#4D43EF]/80 transition duration-300 cursor-pointer"
                         onClick={saveUPI}
+                        disabled={upiLoading}
                     >
-                        Save UPI
+                        {upiLoading ? "Saving..." : "Save UPI"}
                     </Button>
                 </div>
 
@@ -191,8 +210,9 @@ export default function ProfilePage() {
                     <Button
                         className="bg-[#4D43EF] hover:bg-[#4D43EF]/80 transition duration-300 cursor-pointer"
                         onClick={saveBankDetails}
+                        disabled={bankLoading}
                     >
-                        Save Bank Details
+                        {bankLoading ? "Saving..." : "Save Bank Details"}
                     </Button>
                 </div>
             </div>
