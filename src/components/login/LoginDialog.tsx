@@ -67,6 +67,7 @@ export function LoginDialog() {
                 showError("Google Authentication Failed.", "");
                 return;
             }
+            // console.log(response.data);
             window.location.href = response.data;
         } catch (error) {
             showError("Google Authentication Failed.", "");
