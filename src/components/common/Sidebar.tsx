@@ -11,7 +11,7 @@ import { FaTelegramPlane } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { GiReceiveMoney } from "react-icons/gi";
-import { BiSupport } from "react-icons/bi";
+import { BiWallet } from "react-icons/bi";
 // import { IoMdSettings } from "react-icons/io";
 import { FaArrowRightLong } from "react-icons/fa6";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
@@ -53,12 +53,20 @@ const Sidebar: React.FC = () => {
     },
     {
       id: 4,
-      icon: BiSupport,
-      tag: "Help & Support",
+      icon: BiWallet,
+      tag: "Wallet",
       click: () => {
-        navigate("/support");
+        navigate("/wallet");
       },
     },
+    // {
+    //   id: 4,
+    //   icon: BiSupport,
+    //   tag: "Help & Support",
+    //   click: () => {
+    //     navigate("/support");
+    //   },
+    // },
     // {
     //   id: 5,
     //   icon: IoMdSettings,

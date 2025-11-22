@@ -48,7 +48,8 @@ const Navbar: React.FC = () => {
   const routeTitles: Record<string, string> = {
     "/transactions": "Transaction",
     "/profile": "Profile",
-    "/support": "Support"
+    "/support": "Support",
+    "/wallet": "Wallet"
   };
 
   const title = routeTitles[location.pathname];
@@ -56,7 +57,8 @@ const Navbar: React.FC = () => {
   const showHelp: Record<string, boolean> = {
     "/transactions": true,
     "/profile": true,
-    "/support": false
+    "/support": false,
+    "/wallet": true
   };
 
   const show = showHelp[location.pathname];

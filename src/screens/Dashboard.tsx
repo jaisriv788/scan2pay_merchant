@@ -41,8 +41,8 @@ export default function DashboardPage() {
             }
 
             setData({
-                usdtAmount: response.data.data.usdt_amount,
-                usdcAmount: response.data.data.usdc_amount,
+                usdtAmount: response.data.data.total_usdt,
+                usdcAmount: response.data.data.total_usdc,
                 transactionCount: response.data.data.total_transactions,
                 walletAddress: response.data.data.wallet_address,
             });
@@ -142,7 +142,7 @@ export default function DashboardPage() {
                 {/* Total Business */}
                 <MagicCard
                     gradientColor="#f5d3b0"
-                    className="p-5 rounded-2xl backdrop-blur-md border border-orange-500/40
+                    className="p-5 overflow-hidden rounded-2xl backdrop-blur-md border border-orange-500/40
                     bg-white/60 hover:bg-orange-50 hover:shadow-xl transition-all duration-300"
                 >
                     <CardHeader className="flex flex-row items-center justify-between pb-1">
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold text-gray-900 tracking-tight">
-                            ${data?.walletAddress ?? 0}
+                            ${data?.walletAddress ? data?.walletAddress.toString().slice(0, 7) + "....." + data?.walletAddress.toString().slice(-7) : ""}
                         </p>
                     </CardContent>
                 </MagicCard>

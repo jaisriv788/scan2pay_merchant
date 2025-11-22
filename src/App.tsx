@@ -11,7 +11,7 @@ import ProtectedRoute from './components/common/ProtectedRoute'
 import Verification from './components/common/Verification'
 import Profile from './screens/Profile'
 import Transaction from './screens/Transaction'
-import Support from './screens/Support'
+import Wallet from './screens/Wallet'
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -42,7 +42,8 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/transactions" element={<Transaction />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/wallet" element={<Wallet />} />
+          {/* <Route path="/support" element={<Support />} /> */}
         </Route>
       </Routes>
     </>
