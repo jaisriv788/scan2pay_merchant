@@ -11,6 +11,7 @@ import NotificationSlider from "../notifications/NotificationModal";
 import { readSeenIds, writeSeenIds } from "@/utils/seenStorage";
 import { useShowSuccess } from "@/hooks/useShowSuccess";
 import { useShowError } from "@/hooks/useShowError";
+import { useNavigate } from "react-router";
 
 type Order = {
   id: number;
@@ -30,6 +31,8 @@ const ProtectedRoute: React.FC = () => {
 
   const { showSuccess } = useShowSuccess();
   const { showError } = useShowError();
+
+  const navigate = useNavigate();
 
   const baseUrl = useSelector((state: RootState) => state.consts.baseUrl);
   const token = useSelector((state: RootState) => state.user.token);
@@ -131,6 +134,7 @@ const ProtectedRoute: React.FC = () => {
       console.log(res.data);
       if (res.data.status) {
         showSuccess("Order accepted successfully", "");
+        navigate(`/confirmation/${o.order_id}`);
       }
     } catch (err) {
       console.warn("Accept failed:", err);
@@ -163,7 +167,6 @@ const ProtectedRoute: React.FC = () => {
       <Sidebar />
       <Navbar />
       <Outlet />
-
       <NotificationSlider
         notifications={current ? [current] : []}
         onAccept={handleAccept}

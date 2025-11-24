@@ -49,24 +49,27 @@ const Navbar: React.FC = () => {
     "/transactions": "Transaction",
     "/profile": "Profile",
     "/support": "Support",
-    "/wallet": "Wallet"
+    "/wallet": "Wallet",
   };
 
-  const title = routeTitles[location.pathname];
+  let title = routeTitles[location.pathname];
+
+  if (location.pathname.startsWith("/confirmation")) {
+    title = "Confirmation";
+  }
 
   const showHelp: Record<string, boolean> = {
     "/transactions": true,
     "/profile": true,
     "/support": false,
-    "/wallet": true
+    "/wallet": true,
   };
 
   const show = showHelp[location.pathname];
 
   useEffect(() => {
     const interval = setInterval(
-      () =>
-        setShowSelling((prev) => (prev == 3 ? 0 : prev + 1)),
+      () => setShowSelling((prev) => (prev == 3 ? 0 : prev + 1)),
       3500
     );
     return () => clearInterval(interval);

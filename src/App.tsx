@@ -12,6 +12,7 @@ import Verification from "./components/common/Verification";
 import Profile from "./screens/Profile";
 import Transaction from "./screens/Transaction";
 import Wallet from "./screens/Wallet";
+import Confirmation from "./screens/Confirmation";
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -42,6 +43,7 @@ const App: React.FC = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/transactions" element={<Transaction />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/confirmation/:orderid" element={<Confirmation />} />
         </Route>
       </Routes>
     </>
