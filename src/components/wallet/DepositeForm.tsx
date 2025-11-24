@@ -18,7 +18,7 @@ const DepositeForm: React.FC = () => {
     const [amount, setAmount] = useState("");
     const [loading, setLoading] = useState(false);
     const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
-    const userData = useSelector((state: RootState) => state?.user?.userData);
+    // const userData = useSelector((state: RootState) => state?.user?.userData);
     const token = useSelector((state: RootState) => state?.user?.token);
 
     const handleSubmit = async () => {
