@@ -10,6 +10,7 @@ type Order = {
   type?: string;
   created_at?: string;
   user_id?: number;
+  order_type?: string;
 };
 
 type Props = {
@@ -40,13 +41,23 @@ const NotificationSlider: React.FC<Props> = ({
             className="relative w-96 bg-white rounded-xl shadow-xl border border-slate-200/60"
           >
             {/* Accent Line on the left */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 rounded-l-xl" />
+            <div
+              className={`absolute left-0 top-0 bottom-0 w-1 ${
+                order.order_type == "buy" ? "bg-blue-600" : "bg-emerald-600"
+              } rounded-l-xl`}
+            />
 
             <div className="p-4 pl-5">
               {/* Header Row */}
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="bg-blue-50 text-blue-600 p-1 rounded">
+                  <span
+                    className={`p-1 rounded ${
+                      order.order_type == "buy"
+                        ? "bg-blue-50 text-blue-600"
+                        : "bg-emerald-50 text-emerald-600"
+                    }`}
+                  >
                     {/* Bag Icon */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +75,7 @@ const NotificationSlider: React.FC<Props> = ({
                     </svg>
                   </span>
                   <h3 className="font-bold text-slate-800 text-sm">
-                    New Order
+                    New {order?.order_type == "buy" ? "Buy" : "Sell"} Order
                   </h3>
                 </div>
                 <button
@@ -171,7 +182,11 @@ const NotificationSlider: React.FC<Props> = ({
                 </button>
                 <button
                   onClick={() => onAccept(order)}
-                  className="text-xs cursor-pointer transition ease-in-out duration-300 font-semibold bg-blue-600 text-white px-4 py-1.5 rounded shadow-sm hover:bg-blue-700 transition-colors"
+                  className={`text-xs cursor-pointer transition ease-in-out duration-300 font-semibold ${
+                    order.order_type == "buy"
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-emerald-600 hover:bg-emerald-700"
+                  } text-white px-4 py-1.5 rounded shadow-sm  transition-colors`}
                 >
                   Accept Order
                 </button>

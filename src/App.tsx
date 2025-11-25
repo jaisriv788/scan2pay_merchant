@@ -15,6 +15,7 @@ import Wallet from "./screens/Wallet";
 import Confirmation from "./screens/Confirmation";
 import TrxConfirm from "./components/common/TrxConfirm";
 import TrxError from "./components/common/TrxError";
+import SellConfirmation from "./screens/SellConfirmation";
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -53,6 +54,10 @@ const App: React.FC = () => {
           <Route path="/transactions" element={<Transaction />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/confirmation/:orderid" element={<Confirmation />} />
+          <Route
+            path="/sell-confirmation/:orderid"
+            element={<SellConfirmation />}
+          />
         </Route>
       </Routes>
     </>

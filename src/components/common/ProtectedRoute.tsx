@@ -22,6 +22,7 @@ type Order = {
   status?: string;
   type?: string;
   created_at?: string;
+  order_type?: string;
 };
 
 const ProtectedRoute: React.FC = () => {
@@ -128,13 +129,19 @@ const ProtectedRoute: React.FC = () => {
     setCurrent(null);
     try {
       const res = await axios.post(`${baseUrl}/merchant/accept-buy-order`, {
-        order_id: o.id,
+        order_id: o?.order_id,
         merchant_id: user?.id,
       });
       console.log(res.data);
       if (res.data.status) {
         showSuccess("Order accepted successfully", "");
-        navigate(`/confirmation/${o.order_id}`);
+        if (o.order_type == "buy") {
+          navigate(`/confirmation/${o.order_id}`);
+        } else {
+          navigate(`/sell-confirmation/${o.order_id}`);
+        }
+      } else {
+        showError("Order acceptance failed.", "");
       }
     } catch (err) {
       console.warn("Accept failed:", err);

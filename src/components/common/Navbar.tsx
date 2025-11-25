@@ -58,6 +58,10 @@ const Navbar: React.FC = () => {
     title = "Confirmation";
   }
 
+  if (location.pathname.startsWith("/sell-confirmation")) {
+    title = "Sell Confirmation";
+  }
+
   const showHelp: Record<string, boolean> = {
     "/transactions": false,
     "/profile": false,
