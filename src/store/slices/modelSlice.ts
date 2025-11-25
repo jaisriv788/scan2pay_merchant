@@ -14,6 +14,8 @@ interface ModelState {
     title: string;
     msg: string;
   };
+  showTrxSuccess: boolean;
+  showTrxFail: boolean;
 }
 
 const initialState: ModelState = {
@@ -29,6 +31,8 @@ const initialState: ModelState = {
     title: "",
     msg: "",
   },
+  showTrxSuccess: false,
+  showTrxFail: false,
 };
 
 const modelSlice = createSlice({
@@ -86,11 +90,25 @@ const modelSlice = createSlice({
     setCount: (state, action: PayloadAction<Pick<ModelState, "count">>) => {
       state.count = action.payload.count;
     },
+    setTrxSuccess: (
+      state,
+      action: PayloadAction<Pick<ModelState, "showTrxSuccess">>
+    ) => {
+      state.showTrxSuccess = action.payload.showTrxSuccess;
+    },
+    setTrxFail: (
+      state,
+      action: PayloadAction<Pick<ModelState, "showTrxFail">>
+    ) => {
+      state.showTrxFail = action.payload.showTrxFail;
+    },
   },
 });
 
 export const {
   setSidebar,
+  setTrxSuccess,
+  setTrxFail,
   setDepositSlider,
   setWithdrawSlider,
   setConnectionSlider,

@@ -13,6 +13,8 @@ import Profile from "./screens/Profile";
 import Transaction from "./screens/Transaction";
 import Wallet from "./screens/Wallet";
 import Confirmation from "./screens/Confirmation";
+import TrxConfirm from "./components/common/TrxConfirm";
+import TrxError from "./components/common/TrxError";
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -27,11 +29,18 @@ const App: React.FC = () => {
   const showSuccess = useSelector(
     (state: RootState) => state.model.showSuccessModel
   );
-
+  const showTrxFail = useSelector(
+    (state: RootState) => state.model.showTrxFail
+  );
+  const showTrxSuccess = useSelector(
+    (state: RootState) => state.model.showTrxSuccess
+  );
   return (
     <>
       {showError && <Error />}
       {showSuccess && <Success />}
+      <TrxConfirm open={showTrxSuccess} />
+      <TrxError open={showTrxFail} />
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/" element={<Login />} />

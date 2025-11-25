@@ -96,7 +96,7 @@ const ProtectedRoute: React.FC = () => {
       );
       const payload = response?.data?.data;
 
-      console.log({ payload, current });
+      // console.log({ payload, current });
 
       const orders: Order[] = payload?.pendingOrders ?? payload ?? [];
 

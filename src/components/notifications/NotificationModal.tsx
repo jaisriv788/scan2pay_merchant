@@ -25,7 +25,7 @@ const NotificationSlider: React.FC<Props> = ({
   onDeny,
   onClose,
 }) => {
-  console.log({ notifications });
+  // console.log({ notifications });
   return (
     <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 font-sans">
       <AnimatePresence>
