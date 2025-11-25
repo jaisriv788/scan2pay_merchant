@@ -50,7 +50,7 @@ export default function SuccessModal({ open }: ModalProps) {
               onClick={() => {
                 dispatch(setTrxSuccess({ showTrxSuccess: false }));
               }}
-              className="w-full bg-[#4D43EF] hover:bg-[#4D43EF]/90"
+              className="w-full bg-[#4D43EF] hover:bg-[#4D43EF]/90 cursor-pointer"
             >
               Continue
             </Button>
