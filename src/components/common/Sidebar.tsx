@@ -104,7 +104,8 @@ const Sidebar: React.FC = () => {
   async function handleLogout() {
     try {
       await axios.post(
-        `${baseUrl}/logout`, {},
+        `${baseUrl}/logout`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,6 +119,7 @@ const Sidebar: React.FC = () => {
         })
       );
       dispatch(signout());
+      localStorage.removeItem("seenPendingOrders_v1");
       handleClose();
     } catch (error) {
       console.log(error);
@@ -181,12 +183,14 @@ const Sidebar: React.FC = () => {
                     <div>
                       {item.id == 6 ? (
                         <div
-                          className={`w-4 h-4  ${isOnline ? "bg-green-300" : "bg-red-300"
-                            } rounded-full flex items-center justify-center`}
+                          className={`w-4 h-4  ${
+                            isOnline ? "bg-green-300" : "bg-red-300"
+                          } rounded-full flex items-center justify-center`}
                         >
                           <div
-                            className={`w-2.5 h-2.5 ${isOnline ? "bg-green-600" : "bg-red-600"
-                              } rounded-full animate-ping`}
+                            className={`w-2.5 h-2.5 ${
+                              isOnline ? "bg-green-600" : "bg-red-600"
+                            } rounded-full animate-ping`}
                             style={{ animationDuration: "1.4s" }}
                           ></div>
                         </div>

@@ -165,13 +165,13 @@ const NotificationSlider: React.FC<Props> = ({
               <div className="flex justify-end gap-2 pt-2 border-t border-slate-50">
                 <button
                   onClick={() => onDeny(order)}
-                  className="text-xs font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded transition-colors"
+                  className="text-xs cursor-pointer transition ease-in-out duration-300 font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded transition-colors"
                 >
                   Deny
                 </button>
                 <button
                   onClick={() => onAccept(order)}
-                  className="text-xs font-semibold bg-blue-600 text-white px-4 py-1.5 rounded shadow-sm hover:bg-blue-700 transition-colors"
+                  className="text-xs cursor-pointer transition ease-in-out duration-300 font-semibold bg-blue-600 text-white px-4 py-1.5 rounded shadow-sm hover:bg-blue-700 transition-colors"
                 >
                   Accept Order
                 </button>

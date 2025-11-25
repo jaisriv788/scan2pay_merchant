@@ -59,10 +59,10 @@ const Navbar: React.FC = () => {
   }
 
   const showHelp: Record<string, boolean> = {
-    "/transactions": true,
-    "/profile": true,
+    "/transactions": false,
+    "/profile": false,
     "/support": false,
-    "/wallet": true,
+    "/wallet": false,
   };
 
   const show = showHelp[location.pathname];
