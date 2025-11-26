@@ -23,6 +23,7 @@ type Order = {
   type?: string;
   created_at?: string;
   order_type?: string;
+  upi_id?: string;
 };
 
 const ProtectedRoute: React.FC = () => {
@@ -138,7 +139,9 @@ const ProtectedRoute: React.FC = () => {
         if (o.order_type == "buy") {
           navigate(`/confirmation/${o.order_id}`);
         } else {
-          navigate(`/sell-confirmation/${o.order_id}`);
+          navigate(
+            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
+          );
         }
       } else {
         showError("Order acceptance failed.", "");
@@ -153,9 +156,9 @@ const ProtectedRoute: React.FC = () => {
     setCurrent(null);
     try {
       const res = await axios.post(`${baseUrl}/merchant/reject-buy-order`, {
-        order_id: o.id,
+        order_id: o.order_id,
       });
-      console.log(res);
+      // console.log(res);
       if (res.data.status) {
         showError("Order rejected successfully", "");
       }

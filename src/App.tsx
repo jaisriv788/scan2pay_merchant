@@ -55,7 +55,7 @@ const App: React.FC = () => {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/confirmation/:orderid" element={<Confirmation />} />
           <Route
-            path="/sell-confirmation/:orderid"
+            path="/sell-confirmation/:orderid/:upi_id/:amount"
             element={<SellConfirmation />}
           />
         </Route>

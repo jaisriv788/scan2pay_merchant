@@ -344,7 +344,7 @@ export function LoginDialog() {
                             />
                             <img
                                 className="logo"
-                                src="/merchant/login/icon.png"
+                                src="icon.jpeg"
                                 alt="icon"
                                 width={45}
                             />
@@ -354,7 +354,7 @@ export function LoginDialog() {
                         <DialogTitle className="flex items-center font-bold gap-2">
                             <img
                                 className="logo"
-                                src="/merchant/login/icon.png"
+                                src="icon.jpeg"
                                 alt="icon"
                                 width={45}
                             />

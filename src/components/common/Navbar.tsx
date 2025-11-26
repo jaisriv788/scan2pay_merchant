@@ -159,7 +159,7 @@ const Navbar: React.FC = () => {
             >
               <img
                 className=""
-                src="/merchant/login/icon.png"
+                src="icon.jpeg"
                 alt="icon"
                 width={50}
               />

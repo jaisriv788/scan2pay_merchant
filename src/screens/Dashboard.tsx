@@ -11,8 +11,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import TrxConfirm from "../components/common/TrxConfirm";
-import TrxError from "../components/common/TrxError";
 
 interface DashboardProps {
   usdtAmount?: number;
@@ -24,14 +22,13 @@ interface DashboardProps {
 export default function DashboardPage() {
   const [loading, setloading] = useState(false);
   const [data, setData] = useState<DashboardProps | null>(null);
-  const [showSuccess, setShowSuccess] = useState(true);
-  const [showFail, setShowFail] = useState(false);
 
   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
   const token = useSelector((state: RootState) => state?.user?.token);
 
   async function fetchData() {
     try {
+      console.log(loading)
       setloading(true);
       const response = await axios.post(
         `${baseUrl}/merchant/index`,

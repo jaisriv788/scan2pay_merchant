@@ -10,7 +10,7 @@ const Login: React.FC = () => {
                     <div className=" text-2xl font-extrabold flex gap-2 items-center">
                         <img
                             className="logo"
-                            src="/merchant/login/icon.png"
+                            src="icon.jpeg"
                             alt="icon"
                             width={60}
                         />

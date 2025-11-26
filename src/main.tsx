@@ -24,14 +24,14 @@ export const PWAListener = () => {
   return null;
 };
 
-createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <BrowserRouter basename='/merchant/'>
-        <App />
-      </BrowserRouter>
-    </PersistGate>
-  </Provider>
-  // </StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter basename="/merchant/">
+          <App />
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </StrictMode>
+);

@@ -151,7 +151,7 @@ const Sidebar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <img
                   className="logo"
-                  src="/merchant/login/icon2.jpg"
+                  src="icon.jpeg"
                   alt="icon"
                   width={40}
                 />
