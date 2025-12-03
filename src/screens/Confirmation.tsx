@@ -10,8 +10,7 @@ import { AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
-import { setTrxSuccess } from "@/store/slices/modelSlice";
-import { setTrxFail } from "@/store/slices/modelSlice";
+import { setTrxSuccess, setTrxFail } from "../../src/store/slices/modelSlice";
 
 const Confirmation: React.FC = () => {
   const { orderid } = useParams();
@@ -30,7 +29,7 @@ const Confirmation: React.FC = () => {
     if (data) {
       return;
     }
-    let interval = setInterval(async () => {
+    const interval = setInterval(async () => {
       try {
         setLoading(true);
         if (data) {

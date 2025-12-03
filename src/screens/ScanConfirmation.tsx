@@ -1,0 +1,299 @@
+// import type { RootState } from "@/store/store";
+// import axios from "axios";
+// import React, { useEffect, useState } from "react";
+// import { useSelector } from "react-redux";
+// import { useNavigate, useParams } from "react-router";
+
+// const ScanConfirmation: React.FC = () => {
+//   const [loading, setLoading] = useState(true);
+//   const [data, setData] = useState(null);
+
+//   const navigate = useNavigate();
+
+//   const { inr, usdt, order_id } = useParams<{
+//     inr: string;
+//     usdt: string;
+//     order_id: string;
+//   }>();
+
+//   const tokenHeader = useSelector((state: RootState) => state?.user?.token);
+//   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
+
+//   // --- Polling logic ---
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.post(
+//           `${baseUrl}/merchant/get-scan-details`,
+//           { order_id },
+//           {
+//             headers: {
+//               Authorization: `Bearer ${tokenHeader}`,
+//               "Content-Type": "application/json",
+//             },
+//           }
+//         );
+//         console.log("Response data:", response.data);
+//         if (response.data.status) {
+//           setData(response.data.data);
+//           setLoading(false);
+//           clearInterval(interval);
+//         }
+//       } catch (err) {
+//         console.error("Error fetching:", err);
+//         setLoading(false);
+//         navigate("dashboard");
+//       }
+//     };
+
+//     // Poll every 2 seconds
+//     const interval = setInterval(fetchData, 2000);
+
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   // --- Loader Page ---
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+//         <div className="loader mb-4"></div>
+//         <p className="text-slate-600 text-lg">Please wait ...</p>
+
+//         {/* Simple CSS loader */}
+//         <style>
+//           {`
+//             .loader {
+//               border: 4px solid #e2e8f0;
+//               border-top: 4px solid #0f172a;
+//               border-radius: 50%;
+//               width: 40px;
+//               height: 40px;
+//               animation: spin 1s linear infinite;
+//             }
+//             @keyframes spin {
+//               0% { transform: rotate(0deg); }
+//               100% { transform: rotate(360deg); }
+//             }
+//           `}
+//         </style>
+//       </div>
+//     );
+//   }
+
+//   // --- Final Page After Data Arrives ---
+//   return (
+//     <div className="min-h-screen flex items-start justify-center bg-slate-50 py-18">
+//       <div>
+//         <h1 className="text-2xl font-semibold text-slate-800 mb-4">
+//           Scan Confirmation
+//         </h1>
+
+//         <pre className="bg-white p-4 rounded-xl shadow text-sm text-slate-700">
+//           {JSON.stringify(data, null, 2)}
+//         </pre>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ScanConfirmation;
+
+import type { AppDispatch, RootState } from "@/store/store";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Copy } from "lucide-react";
+import { useShowSuccess } from "@/hooks/useShowSuccess";
+import { useShowError } from "@/hooks/useShowError";
+import { useDispatch } from "react-redux";
+import { setTrxSuccess } from "@/store/slices/modelSlice";
+
+const ScanConfirmation: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [note, setNote] = useState("");
+  const [btnLoading, setBtnLoading] = useState(false);
+  //   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+
+  const navigate = useNavigate();
+  const { showSuccess } = useShowSuccess();
+  const { showError } = useShowError();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { order_id } = useParams<{
+    order_id: string;
+  }>();
+
+  const tokenHeader = useSelector((state: RootState) => state?.user?.token);
+  const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `${baseUrl}/merchant/get-scan-details`,
+          { order_id },
+          {
+            headers: {
+              Authorization: `Bearer ${tokenHeader}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.data.status) {
+          setData(response.data.data);
+          setLoading(false);
+          clearInterval(interval);
+        }
+      } catch (err) {
+        console.error("Error fetching:", err);
+        setLoading(false);
+        navigate("dashboard");
+      }
+    };
+
+    const interval = setInterval(fetchData, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCopy = () => {
+    if (data?.scan_upi) navigator.clipboard.writeText(data.scan_upi);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setBtnLoading(true);
+      const formData = new FormData();
+
+      formData.append("order_id", order_id);
+      formData.append("upi_reference", note);
+      // formData.append("screenshot", uploadedImage);
+
+      const response = await axios.post(
+        `${baseUrl}/submit-scan-payment-proof`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenHeader}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Submit response:", response.data);
+      if (response.data.status) {
+        showSuccess("Payment proof submitted successfully.", "");
+        navigate("/dashboard");
+        dispatch(setTrxSuccess({ showTrxSuccess: true }));
+      }
+    } catch (err) {
+      console.error("Error submitting:", err);
+      showError("Failed to submit payment proof. Please try again.", "");
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <div className="loader mb-4"></div>
+        <p className="text-slate-600 text-lg">Please wait ...</p>
+
+        <style>{`
+          .loader {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #0f172a;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  const upiQR = `upi://pay?pa=${data?.scan_upi}&pn=Merchant&am=${data?.amount}&cu=INR`;
+
+  return (
+    <div className="min-h-screen flex items-start justify-center bg-slate-100 pt-18 p-3">
+      <Card className="w-full max-w-md shadow-xl rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-2xl font-semibold text-center">
+            Scan to Pay
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="flex justify-center">
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(
+                upiQR
+              )}`}
+              alt="upi-qr"
+              className="rounded-xl shadow-lg"
+            />
+          </div>
+
+          <div className="text-center text-lg font-medium text-slate-700">
+            Amount to Pay:{" "}
+            <span className="font-bold text-green-700">₹{data?.amount}</span>
+          </div>
+
+          <div className="flex items-center bg-slate-100 p-3 rounded-xl border">
+            <span className="flex-1 font-medium text-slate-800 overflow-hidden">
+              {data?.scan_upi}
+            </span>
+            <Button variant="outline" size="icon" onClick={handleCopy}>
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* <div className="space-y-2">
+            <Label>Upload Screenshot</Label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setUploadedImage(e.target.files?.[0] ?? null)}
+                className="cursor-pointer"
+              />
+            </div>
+          </div> */}
+
+          <div className="space-y-2">
+            <Label>Transaction Id</Label>
+            <Input
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Enter Transaction Id"
+            />
+          </div>
+
+          <Button
+            onClick={handleSubmit}
+            disabled={btnLoading || note.trim() === ""}
+            className="w-full cursor-pointer transition ease-in-out duration-300 text-lg py-3 rounded-xl bg-[#4D43EF] hover:bg-[#4D43EF]/70"
+          >
+            {btnLoading ? "Submitting..." : "Submit"}
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default ScanConfirmation;

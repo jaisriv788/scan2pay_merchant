@@ -125,7 +125,7 @@ const SellConfirmation: React.FC = () => {
       return;
     }
 
-    let interval = setInterval(async () => {
+    const interval = setInterval(async () => {
       try {
         const response = await axios.post(
           `${baseUrl}/confirm-order-status`,
