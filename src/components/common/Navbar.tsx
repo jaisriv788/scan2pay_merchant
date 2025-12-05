@@ -50,6 +50,7 @@ const Navbar: React.FC = () => {
     "/profile": "Profile",
     "/support": "Support",
     "/wallet": "Wallet",
+    "/pending-request": "Pending Request",
   };
 
   let title = routeTitles[location.pathname];

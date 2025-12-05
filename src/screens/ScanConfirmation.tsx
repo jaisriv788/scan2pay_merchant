@@ -119,6 +119,7 @@ const ScanConfirmation: React.FC = () => {
   const [note, setNote] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
   //   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [upiId, setUpiId] = useState("");
 
   const navigate = useNavigate();
   const { showSuccess } = useShowSuccess();
@@ -146,7 +147,7 @@ const ScanConfirmation: React.FC = () => {
             },
           }
         );
- console.log("Response data:", response.data);
+        console.log("Response data:", response.data);
         if (response.data.status) {
           setData(response.data.data);
           setLoading(false);
@@ -176,6 +177,7 @@ const ScanConfirmation: React.FC = () => {
       formData.append("order_id", order_id);
       formData.append("upi_reference", note);
       // formData.append("screenshot", uploadedImage);
+      formData.append("upi_id", upiId);
 
       const response = await axios.post(
         `${baseUrl}/submit-scan-payment-proof`,
@@ -272,7 +274,15 @@ const ScanConfirmation: React.FC = () => {
               />
             </div>
           </div> */}
-
+          <div className="space-y-2">
+            <Label>Transaction Id</Label>
+            <Input
+              type="text"
+              value={upiId}
+              onChange={(e) => setUpiId(e.target.value)}
+              placeholder="Enter UPI Id"
+            />
+          </div>
           <div className="space-y-2">
             <Label>Transaction Id</Label>
             <Input

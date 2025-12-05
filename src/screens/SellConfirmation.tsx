@@ -39,6 +39,7 @@ const SellConfirmation: React.FC = () => {
   const { showSuccess } = useShowSuccess();
 
   const [transactionId, setTransactionId] = useState<string>("");
+  const [upiId, setUpiId] = useState<string>("");
   // const [imageFile, setImageFile] = useState<File | null>(null);
   // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -91,6 +92,7 @@ const SellConfirmation: React.FC = () => {
       const formData = new FormData();
       formData.append("order_id", orderData?.order_id);
       formData.append("upi_reference", transactionId);
+      formData.append("upi_id", upiId);
       // formData.append("screenshot", imageFile);
 
       // console.log({ order_id, transactionId, imageFile });
@@ -218,6 +220,19 @@ const SellConfirmation: React.FC = () => {
 
             {/* Right: form (Transaction ID + Image upload) */}
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-gray-600">
+                  UPI ID
+                </label>
+                <input
+                  type="text"
+                  disabled={loading || confirmed}
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                  placeholder="Enter UPI ID"
+                  className="w-full mt-2 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D43EF] focus:border-transparent bg-white"
+                />
+              </div>
               <div>
                 <label className="text-sm font-medium text-gray-600">
                   Transaction ID

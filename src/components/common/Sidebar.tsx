@@ -8,7 +8,7 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoLogOut } from "react-icons/io5";
 import { RiTwitterXFill } from "react-icons/ri";
 import { FaTelegramPlane } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdOutlinePendingActions } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { GiReceiveMoney } from "react-icons/gi";
 import { BiWallet } from "react-icons/bi";
@@ -57,6 +57,14 @@ const Sidebar: React.FC = () => {
       tag: "Wallet",
       click: () => {
         navigate("/wallet");
+      },
+    },
+    {
+      id: 4,
+      icon: MdOutlinePendingActions ,
+      tag: "Pending Requests",
+      click: () => {
+        navigate("/pending-request");
       },
     },
     // {
@@ -149,12 +157,7 @@ const Sidebar: React.FC = () => {
           >
             <div className="px-5 py-5 md:py-4 border-b border-gray-300 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <img
-                  className="logo"
-                  src="icon.jpeg"
-                  alt="icon"
-                  width={40}
-                />
+                <img className="logo" src="icon.jpeg" alt="icon" width={40} />
                 <div className="font-bold">Scan2Pay</div>
               </div>
               <IoCloseCircleSharp
