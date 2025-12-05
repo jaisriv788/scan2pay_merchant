@@ -17,6 +17,8 @@ import TrxConfirm from "./components/common/TrxConfirm";
 import TrxError from "./components/common/TrxError";
 import SellConfirmation from "./screens/SellConfirmation";
 import ScanConfirmation from "./screens/ScanConfirmation";
+import OrderDetails from "./screens/OrderDetails";
+import PendingRequest from "./screens/PendingRequest";
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -59,7 +61,12 @@ const App: React.FC = () => {
             path="/sell-confirmation/:orderid/:upi_id/:amount"
             element={<SellConfirmation />}
           />
-          <Route path="/scan-confirmation/:order_id/:upi_id/:amount" element={<ScanConfirmation />} />
+          <Route path="/order/:order_id?" element={<OrderDetails />} />
+          <Route
+            path="/scan-confirmation/:order_id/:upi_id/:amount"
+            element={<ScanConfirmation />}
+          />
+          <Route path="/pending-request" element={<PendingRequest />} />
         </Route>
       </Routes>
     </>

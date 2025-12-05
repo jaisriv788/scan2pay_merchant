@@ -33,7 +33,6 @@
 
 //   const { showSuccess } = useShowSuccess();
 //   const { showError } = useShowError();
-
 //   const navigate = useNavigate();
 
 //   const baseUrl = useSelector((state: RootState) => state.consts.baseUrl);
@@ -43,6 +42,9 @@
 //   const [queue, setQueue] = useState<Order[]>([]);
 //   const [current, setCurrent] = useState<Order | null>(null);
 //   const intervalRef = useRef<number | null>(null);
+
+//   // NEW: Prevent re-adding orders that are being processed
+//   const processingRef = useRef<Set<number>>(new Set());
 
 //   // Update axios auth header whenever token changes
 //   useEffect(() => {
@@ -59,11 +61,15 @@
 //     }
 //   }, [isOnline]);
 
-//   // Add unseen orders into queue
+//   // Add unseen + not processing orders into queue
 //   const pushUnseenToQueue = (orders: Order[]) => {
 //     const seen = new Set(readSeenIds());
+
 //     const unseen = orders.filter(
-//       (o) => !seen.has(o.id) && o.status === "pending"
+//       (o) =>
+//         !seen.has(o.id) &&
+//         !processingRef.current.has(o.id) && // NEW FIX
+//         o.status === "pending"
 //     );
 
 //     if (unseen.length > 0) {
@@ -85,7 +91,6 @@
 
 //   const fetchPending = async () => {
 //     try {
-//       // console.log("Fetching pending orders...", token);
 //       const response = await axios.post(
 //         `${baseUrl}/merchant/pending-orders`,
 //         {},
@@ -96,10 +101,8 @@
 //           },
 //         }
 //       );
+
 //       const payload = response?.data?.data;
-
-//       // console.log({ payload, current });
-
 //       const orders: Order[] = payload?.pendingOrders ?? payload ?? [];
 
 //       if (Array.isArray(orders)) {
@@ -126,21 +129,29 @@
 //   };
 
 //   const handleAccept = async (o: Order) => {
+//     // 🔥 FIX: Prevent reappearing
+//     processingRef.current.add(o.id);
+
 //     markSeen(o.id);
 //     setCurrent(null);
+
 //     try {
 //       const res = await axios.post(`${baseUrl}/merchant/accept-buy-order`, {
 //         order_id: o?.order_id,
 //         merchant_id: user?.id,
 //       });
-//       console.log(res.data);
+
 //       if (res.data.status) {
 //         showSuccess("Order accepted successfully", "");
 //         if (o.order_type == "buy") {
 //           navigate(`/confirmation/${o.order_id}`);
-//         } else {
+//         } else if (o.order_type == "sell") {
 //           navigate(
 //             `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
+//           );
+//         } else {
+//           navigate(
+//             `/scan-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
 //           );
 //         }
 //       } else {
@@ -152,13 +163,16 @@
 //   };
 
 //   const handleDeny = async (o: Order) => {
+//     // 🔥 FIX: Prevent reappearing
+//     processingRef.current.add(o.id);
+
 //     markSeen(o.id);
 //     setCurrent(null);
+
 //     try {
 //       const res = await axios.post(`${baseUrl}/merchant/reject-buy-order`, {
 //         order_id: o.order_id,
 //       });
-//       // console.log(res);
 //       if (res.data.status) {
 //         showError("Order rejected successfully", "");
 //       }
@@ -168,6 +182,9 @@
 //   };
 
 //   const handleClose = (o: Order) => {
+//     // 🔥 FIX: Prevent reappearing
+//     processingRef.current.add(o.id);
+
 //     markSeen(o.id);
 //     setCurrent(null);
 //   };
@@ -192,7 +209,7 @@
 // export default ProtectedRoute;
 
 import React, { useEffect, useRef, useState } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "@/store/store";
 import Navbar from "./Navbar";
@@ -204,7 +221,6 @@ import NotificationSlider from "../notifications/NotificationModal";
 import { readSeenIds, writeSeenIds } from "@/utils/seenStorage";
 import { useShowSuccess } from "@/hooks/useShowSuccess";
 import { useShowError } from "@/hooks/useShowError";
-import { useNavigate } from "react-router";
 
 type Order = {
   id: number;
@@ -234,34 +250,31 @@ const ProtectedRoute: React.FC = () => {
 
   const [queue, setQueue] = useState<Order[]>([]);
   const [current, setCurrent] = useState<Order | null>(null);
+  const [closingId, setClosingId] = useState<number | null>(null); // NEW — for fade-out
+
   const intervalRef = useRef<number | null>(null);
+  const processingRef = useRef<Set<number>>(new Set()); // avoids reappearing
 
-  // NEW: Prevent re-adding orders that are being processed
-  const processingRef = useRef<Set<number>>(new Set());
-
-  // Update axios auth header whenever token changes
+  /** Set axios Bearer token automatically */
   useEffect(() => {
-    if (token) {
+    if (token)
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
+    else delete axios.defaults.headers.common["Authorization"];
   }, [token]);
 
+  /** Detect offline */
   useEffect(() => {
-    if (!isOnline) {
-      dispatch(setIsUserConnected({ isConnected: false }));
-    }
+    if (!isOnline) dispatch(setIsUserConnected({ isConnected: false }));
   }, [isOnline]);
 
-  // Add unseen + not processing orders into queue
+  /** Push unseen orders into queue */
   const pushUnseenToQueue = (orders: Order[]) => {
     const seen = new Set(readSeenIds());
 
     const unseen = orders.filter(
       (o) =>
         !seen.has(o.id) &&
-        !processingRef.current.has(o.id) && // NEW FIX
+        !processingRef.current.has(o.id) &&
         o.status === "pending"
     );
 
@@ -274,14 +287,7 @@ const ProtectedRoute: React.FC = () => {
     }
   };
 
-  // If no active card and queue has items, show next
-  useEffect(() => {
-    if (!current && queue.length > 0) {
-      setCurrent(queue[0]);
-      setQueue((q) => q.slice(1));
-    }
-  }, [queue, current]);
-
+  /** Polling API for pending orders */
   const fetchPending = async () => {
     try {
       const response = await axios.post(
@@ -298,35 +304,45 @@ const ProtectedRoute: React.FC = () => {
       const payload = response?.data?.data;
       const orders: Order[] = payload?.pendingOrders ?? payload ?? [];
 
-      if (Array.isArray(orders)) {
-        pushUnseenToQueue(orders);
-      }
+      if (Array.isArray(orders)) pushUnseenToQueue(orders);
     } catch (err) {
-      console.error("Pending order fetch failed:", err);
+      console.error("Pending fetch failed:", err);
     }
   };
 
-  // Start polling
+  /** Start polling */
   useEffect(() => {
     fetchPending();
     intervalRef.current = window.setInterval(fetchPending, 2000);
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [baseUrl, token]);
 
+  /** Handle order transitioning from queue to current */
+  useEffect(() => {
+    if (queue.length === 0 || current) return;
+
+    const next = queue[0];
+
+    processingRef.current.add(next.id);
+    setCurrent(next);
+    setQueue((q) => q.slice(1));
+  }, [queue]);
+
+  /** Save seen ID */
   const markSeen = (id: number) => {
     const seen = new Set(readSeenIds());
     seen.add(id);
     writeSeenIds([...seen]);
   };
 
+  /** ORDER ACTIONS */
   const handleAccept = async (o: Order) => {
-    // 🔥 FIX: Prevent reappearing
     processingRef.current.add(o.id);
-
     markSeen(o.id);
-    setCurrent(null);
+    setClosingId(o.id); // animate out
 
     try {
       const res = await axios.post(`${baseUrl}/merchant/accept-buy-order`, {
@@ -334,21 +350,21 @@ const ProtectedRoute: React.FC = () => {
         merchant_id: user?.id,
       });
 
+      console.log("Accept response:", res.data);
+
       if (res.data.status) {
         showSuccess("Order accepted successfully", "");
-        if (o.order_type == "buy") {
-          navigate(`/confirmation/${o.order_id}`);
-        } else if (o.order_type == "sell") {
+        if (o.order_type === "buy") navigate(`/confirmation/${o.order_id}`);
+        else if (o.order_type === "sell")
           navigate(
             `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
           );
-        } else {
+        else
           navigate(
             `/scan-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
           );
-        }
       } else {
-        showError("Order acceptance failed.", "");
+        showError("Order acceptance failed.", res.data.message);
       }
     } catch (err) {
       console.warn("Accept failed:", err);
@@ -356,16 +372,15 @@ const ProtectedRoute: React.FC = () => {
   };
 
   const handleDeny = async (o: Order) => {
-    // 🔥 FIX: Prevent reappearing
     processingRef.current.add(o.id);
-
     markSeen(o.id);
-    setCurrent(null);
+    setClosingId(o.id);
 
     try {
       const res = await axios.post(`${baseUrl}/merchant/reject-buy-order`, {
         order_id: o.order_id,
       });
+
       if (res.data.status) {
         showError("Order rejected successfully", "");
       }
@@ -375,11 +390,17 @@ const ProtectedRoute: React.FC = () => {
   };
 
   const handleClose = (o: Order) => {
-    // 🔥 FIX: Prevent reappearing
     processingRef.current.add(o.id);
-
     markSeen(o.id);
-    setCurrent(null);
+    setClosingId(o.id);
+  };
+
+  /** When exit animation finishes, fully clear */
+  const handleExitComplete = (id: number) => {
+    if (closingId === id) {
+      setCurrent(null);
+      setClosingId(null);
+    }
   };
 
   return isConnected ? (
@@ -387,11 +408,14 @@ const ProtectedRoute: React.FC = () => {
       <Sidebar />
       <Navbar />
       <Outlet />
+
       <NotificationSlider
         notifications={current ? [current] : []}
+        closingId={closingId}
         onAccept={handleAccept}
         onDeny={handleDeny}
         onClose={handleClose}
+        onExited={handleExitComplete}
       />
     </>
   ) : (

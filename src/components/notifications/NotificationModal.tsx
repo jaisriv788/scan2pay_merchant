@@ -1,4 +1,3 @@
-// src/components/notifications/NotificationSlider.tsx
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -15,37 +14,43 @@ type Order = {
 
 type Props = {
   notifications?: Order[];
+  closingId: number | null;
   onAccept: (o: Order) => void;
   onDeny: (o: Order) => void;
   onClose: (o: Order) => void;
+  onExited: (id: number) => void;
 };
 
 const NotificationSlider: React.FC<Props> = ({
   notifications = [],
+  closingId,
   onAccept,
   onDeny,
   onClose,
+  onExited,
 }) => {
-  // console.log({ notifications });
+  const visible = notifications.filter((n) => n.id !== closingId);
+
   return (
     <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 font-sans">
       <AnimatePresence>
-        {(notifications ?? []).map((order) => (
+        {visible.map((order) => (
           <motion.div
             key={order.id}
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 300, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            // Increased width to w-96, added overflow-hidden and standard border radius
-            className="relative w-96 bg-white rounded-xl shadow-xl border border-slate-200/60"
+            onAnimationComplete={() => {
+              if (closingId === order.id) onExited(order.id);
+            }}
+            className="relative w-76 sm:w-96 bg-white rounded-xl shadow-xl border border-slate-200/60"
           >
-            {/* Accent Line on the left */}
             <div
               className={`absolute left-0 top-0 bottom-0 w-1 ${
-                order.order_type == "buy"
+                order.order_type === "buy"
                   ? "bg-blue-600"
-                  : order?.order_type == "sell"
+                  : order.order_type === "sell"
                   ? "bg-emerald-600"
                   : "bg-purple-600"
               } rounded-l-xl`}
@@ -113,14 +118,14 @@ const NotificationSlider: React.FC<Props> = ({
               </div>
 
               {/* Content Grid: Split into 2 columns to save vertical height */}
-              <div className="grid grid-cols-2 gap-4 mb-4 items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-center">
                 {/* Left Column: The Money */}
                 <div>
                   <div className="text-2xl font-extrabold text-slate-900 leading-tight">
-                    ₹{order.inr_amount}
+                    ₹{order.inr_amount.toFixed(2)}
                   </div>
                   <div className="text-xs font-medium text-slate-500 mt-1">
-                    {order.amount} {order.type}
+                    {order.amount.toFixed(4)} {order.type.toUpperCase()}
                   </div>
                 </div>
 

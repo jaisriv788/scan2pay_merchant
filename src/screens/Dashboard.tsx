@@ -10,6 +10,7 @@ import {
   Receipt,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { BiRupee } from "react-icons/bi";
 import { useSelector } from "react-redux";
 
 interface DashboardProps {
@@ -17,6 +18,7 @@ interface DashboardProps {
   usdcAmount?: number;
   transactionCount?: number;
   walletAddress?: number;
+  inr?: number;
 }
 
 export default function DashboardPage() {
@@ -28,7 +30,7 @@ export default function DashboardPage() {
 
   async function fetchData() {
     try {
-      console.log(loading)
+      // console.log(loading)
       setloading(true);
       const response = await axios.post(
         `${baseUrl}/merchant/index`,
@@ -40,7 +42,7 @@ export default function DashboardPage() {
           },
         }
       );
-      // console.log(response.data.data);
+      console.log(response.data.data);
 
       if (response.data.status == "false") {
         setData(null);
@@ -52,6 +54,7 @@ export default function DashboardPage() {
         usdcAmount: response.data.data.total_usdc,
         transactionCount: response.data.data.total_transactions,
         walletAddress: response.data.data.wallet_address,
+        inr: response.data.data.total_inr,
       });
     } catch (error) {
       console.log(error);
@@ -69,7 +72,7 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex items-center justify-center gap-2">
         <Sparkles className="text-[#4D43EF] animate-pulse" />
-        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-[#4D43EF] to-blue-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-extrabold bg-linear-to-r from-[#4D43EF] to-blue-600 bg-clip-text text-transparent">
           Dashboard Overview
         </h2>
       </div>
@@ -93,7 +96,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="md:text-4xl text-2xl font-bold text-gray-900 tracking-tight">
-              ${data?.usdtAmount ?? 0}
+              $ {data?.usdtAmount.toFixed(4) ?? 0.0}
             </p>
           </CardContent>
         </MagicCard>
@@ -115,7 +118,28 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="md:text-4xl text-2xl font-bold text-gray-900 tracking-tight">
-              ${data?.usdcAmount ?? 0}
+              $ {data?.usdcAmount.toFixed(4) ?? 0.0}
+            </p>
+          </CardContent>
+        </MagicCard>
+
+        <MagicCard
+          gradientColor="#f45858"
+          className="p-5 rounded-2xl backdrop-blur-md border border-red-500/40
+                    bg-white/60 hover:bg-orange-50 hover:shadow-xl transition-all duration-300"
+        >
+          <CardHeader className="flex flex-row items-center justify-between pb-1">
+            <CardTitle className="text-lg font-semibold text-red-700">
+              INR Balance
+            </CardTitle>
+            <BiRupee
+              size={24}
+              className="text-orange-600 animate-[pulse_2s_infinite]"
+            />
+          </CardHeader>
+          <CardContent>
+            <p className="md:text-4xl overflow-hidden text-2xl font-bold text-gray-900 tracking-tight">
+              ₹ {data?.inr.toFixed(4) ?? 0.0000}
             </p>
           </CardContent>
         </MagicCard>

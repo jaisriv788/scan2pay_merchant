@@ -158,6 +158,12 @@ const Confirmation: React.FC = () => {
                   UPI Reference
                 </span>
                 <span className="font-semibold">{data.upi_reference}</span>
+              </div>{" "}
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">
+                  UPI Id
+                </span>
+                <span className="font-semibold">{data.upi_id ?? "-"}</span>
               </div>
             </div>
 
