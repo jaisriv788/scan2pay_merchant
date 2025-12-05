@@ -117,16 +117,10 @@ const NotificationSlider: React.FC<Props> = ({
                 {/* Left Column: The Money */}
                 <div>
                   <div className="text-2xl font-extrabold text-slate-900 leading-tight">
-                    ₹
-                    {order.order_type === "scan"
-                      ? order.amount
-                      : order.inr_amount}
+                    ₹{order.inr_amount}
                   </div>
                   <div className="text-xs font-medium text-slate-500 mt-1">
-                    {order.order_type === "scan"
-                      ? order.inr_amount
-                      : order.amount}{" "}
-                    {order.type}
+                    {order.amount} {order.type}
                   </div>
                 </div>
 

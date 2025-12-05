@@ -146,7 +146,7 @@ const ScanConfirmation: React.FC = () => {
             },
           }
         );
-
+ console.log("Response data:", response.data);
         if (response.data.status) {
           setData(response.data.data);
           setLoading(false);

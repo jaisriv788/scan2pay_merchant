@@ -9,8 +9,11 @@ interface DashboardProps {
   transactionCount?: number;
   walletAddress?: number;
 }
+interface DepositeFormProps {
+  setBalance: (value: { usdtAmount: number; usdcAmount: number }) => void;
+}
 
-const DataBox: React.FC = () => {
+const DataBox: React.FC<DepositeFormProps> = ({ setBalance }) => {
   const [loading, setloading] = useState(false);
   const [data, setData] = useState<DashboardProps | null>(null);
 
@@ -31,7 +34,7 @@ const DataBox: React.FC = () => {
           },
         }
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
 
       if (response.data.status == "false") {
         setData(null);
@@ -44,6 +47,10 @@ const DataBox: React.FC = () => {
         transactionCount: response.data.data.total_transactions,
         walletAddress: response.data.data.wallet_address,
       });
+      setBalance({
+        usdtAmount: response.data.data.total_usdt,
+        usdcAmount: response.data.data.total_usdc,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -53,12 +60,16 @@ const DataBox: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+    setInterval(() => {
+      fetchData();
+    }, 10000);
+
     // console.log(transaction.length)
   }, []);
 
   return (
     <div className="card relative overflow-hidden border-b-2 border-r border-[#4D43EF] bg-[#ebe5f7] shadow-2xl rounded-2xl">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#7728E2] via-[#5C5AD7] to-[#22BDCF] opacity-90 rounded-2xl" />
+      <div className="absolute inset-0 bg-linear-to-br from-[#7728E2] via-[#5C5AD7] to-[#22BDCF] opacity-90 rounded-2xl" />
 
       <div className="relative z-10 p-4 sm:p-5 md:p-6 text-white">
         <div className="mb-4 text-center sm:text-left">

@@ -148,7 +148,7 @@ const Navbar: React.FC = () => {
           ) : (
             <FaArrowLeft
               onClick={() => {
-                navigate(-1);
+                navigate("/dashboard");
               }}
               size={30}
               className="md:absolute p-1 border rounded-full hover:bg-gray-100 -left-10 cursor-pointer hover:text-[#4D43EF] transition ease-in-out duration-300"

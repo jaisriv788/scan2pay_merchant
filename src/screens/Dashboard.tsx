@@ -150,7 +150,7 @@ export default function DashboardPage() {
         >
           <CardHeader className="flex flex-row items-center justify-between pb-1">
             <CardTitle className="text-lg font-semibold text-orange-700">
-              Total Business
+              Wallet Address
             </CardTitle>
             <BarChart3
               size={24}
@@ -164,7 +164,7 @@ export default function DashboardPage() {
                 ? data?.walletAddress.toString().slice(0, 7) +
                   "....." +
                   data?.walletAddress.toString().slice(-7)
-                : ""}
+                : "Loading..."}
             </p>
           </CardContent>
         </MagicCard>

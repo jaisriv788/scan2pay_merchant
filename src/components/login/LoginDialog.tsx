@@ -43,6 +43,7 @@ export function LoginDialog() {
   const [otpSent, setOtpSent] = useState(false);
   const [view, setView] = useState(0);
   const [otp, setOtp] = useState("");
+  const [otpValue, setOtpValue] = useState("");
   const [otpLoader, setOtpLoader] = useState(false);
   const [loadingButton, setLoadingButton] = useState<string | null>(null);
   const [emailVerificationLoader, setEmailVerificationLoader] = useState(false);
@@ -68,7 +69,7 @@ export function LoginDialog() {
         return;
       }
       // console.log(response.data);
-        window.location.href = response.data;
+      window.location.href = response.data;
     } catch (error) {
       showError("Google Authentication Failed.", "");
       console.log(error);
@@ -175,6 +176,7 @@ export function LoginDialog() {
         return;
       }
 
+      setOtpValue(response.data.otp);
       showSuccess("OTP Sent", response.data.message);
       setOtpSent(true);
     } catch (error) {
@@ -238,7 +240,7 @@ export function LoginDialog() {
       });
 
       // console.log(response.data);
-
+      setOtpValue(response.data.otp);
       showSuccess("Success", response.data.message);
       setOtpSent(true);
     } catch (error) {
@@ -354,11 +356,11 @@ export function LoginDialog() {
 
           {view == 1 ? (
             <DialogDescription className="text-left">
-              Enter the OTP sent to your Email.
+              Enter the OTP sent to your Email. {otpValue}
             </DialogDescription>
           ) : view == 2 ? (
             <DialogDescription className="text-left">
-              Enter the OTP sent to your Phone Number.
+              Enter the OTP sent to your Phone Number. {otpValue}
             </DialogDescription>
           ) : (
             <DialogDescription className="text-left">
