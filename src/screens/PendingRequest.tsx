@@ -154,11 +154,11 @@ const PendingRequest: React.FC = () => {
   return (
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
       {/* FILTER UI */}
-      <div className="flex flex-col h-fit mb-3 items-center sm:flex-row justify-between gap-3">
+      <div className="flex flex-col h-fit items-center sm:flex-row justify-between gap-3">
         <Button
           onClick={handleClearRequest}
           disabled={loadingBtn}
-          className="hover:bg-[#4D43EF]/70 bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300"
+          className="hover:bg-[#4D43EF]/70 flex-1 w-full bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300"
         >
           {loadingBtn ? "Clearing Order ..." : "Clear Last Order"}
         </Button>
@@ -167,7 +167,7 @@ const PendingRequest: React.FC = () => {
         <select
           value={sortType}
           onChange={(e) => setSortType(e.target.value)}
-          className="border px-3 py-1 rounded-md"
+          className="border px-3 py-1 rounded-md flex-1 w-full"
         >
           <option value="default">Default Order</option>
           <option value="asc">Amount: Low → High</option>
@@ -178,7 +178,7 @@ const PendingRequest: React.FC = () => {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="border px-3 py-1 rounded-md"
+          className="border px-3 py-1 rounded-md flex-1 w-full"
         >
           <option value="all">All Types</option>
           <option value="buy">Buy</option>

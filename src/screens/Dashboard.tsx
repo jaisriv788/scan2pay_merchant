@@ -2,15 +2,9 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MagicCard } from "@/components/ui/magic-card";
 import type { RootState } from "@/store/store";
 import axios from "axios";
-import {
-  Sparkles,
-  Wallet,
-  CircleDollarSign,
-  BarChart3,
-  Receipt,
-} from "lucide-react";
+import { Sparkles, Wallet, CircleDollarSign, Receipt } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Root } from "react-dom/client";
+// import type { Root } from "react-dom/client";
 import { BiRupee } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
