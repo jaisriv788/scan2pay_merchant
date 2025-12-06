@@ -114,7 +114,7 @@ const OrderDetails: React.FC = () => {
       <div className="flex">
         <Button
           onClick={() => {
-            navigate("/transaction");
+            navigate("/transactions");
           }}
           className="flex-1 bg-[#493FEE] hover:bg-[#493FEE]/80 cursor-pointer transition ease-in-out duration-300 "
         >

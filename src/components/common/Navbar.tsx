@@ -17,9 +17,12 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdHelpCircle } from "react-icons/io";
 import axios from "axios";
 import InstallButton from "../PWAInstall/InstallButton";
+import { useParams } from "react-router";
 
 const Navbar: React.FC = () => {
   const [showSelling, setShowSelling] = useState(0);
+
+  const { order_id } = useParams();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,8 +66,12 @@ const Navbar: React.FC = () => {
     title = "Sell Confirmation";
   }
 
-   if (location.pathname.startsWith("/scan-confirmation")) {
+  if (location.pathname.startsWith("/scan-confirmation")) {
     title = "Scan Confirmation";
+  }
+
+  if (location.pathname.startsWith("/order")) {
+    title = "Orders " + order_id;
   }
 
   const showHelp: Record<string, boolean> = {
@@ -162,12 +169,7 @@ const Navbar: React.FC = () => {
                 navigate("/dashboard");
               }}
             >
-              <img
-                className=""
-                src="icon.jpeg"
-                alt="icon"
-                width={50}
-              />
+              <img className="" src="icon.jpeg" alt="icon" width={50} />
               <TextAnimate>Scan2Pay</TextAnimate>
             </div>
           ) : (

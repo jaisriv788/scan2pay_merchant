@@ -36,6 +36,14 @@ const Sidebar: React.FC = () => {
       },
     },
     {
+      id: 5,
+      icon: MdOutlinePendingActions,
+      tag: "Orders",
+      click: () => {
+        navigate("/pending-request");
+      },
+    },
+    {
       id: 2,
       icon: CgProfile,
       tag: "Profile",
@@ -59,14 +67,7 @@ const Sidebar: React.FC = () => {
         navigate("/wallet");
       },
     },
-    {
-      id: 4,
-      icon: MdOutlinePendingActions ,
-      tag: "Pending Requests",
-      click: () => {
-        navigate("/pending-request");
-      },
-    },
+
     // {
     //   id: 4,
     //   icon: BiSupport,

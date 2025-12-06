@@ -11,6 +11,7 @@ import NotificationSlider from "../notifications/NotificationModal";
 import { readSeenIds, writeSeenIds } from "@/utils/seenStorage";
 import { useShowSuccess } from "@/hooks/useShowSuccess";
 import { useShowError } from "@/hooks/useShowError";
+import { setOrdersCount } from "@/store/slices/constSlice";
 
 type Order = {
   id: number;
@@ -91,6 +92,12 @@ const ProtectedRoute: React.FC = () => {
         }
       );
 
+      // console.log(response.data);
+      dispatch(
+        setOrdersCount({
+          ordersCount: response?.data?.data?.pendingOrdersCount,
+        })
+      );
       const payload = response?.data?.data;
       const orders: Order[] = payload?.pendingOrders ?? payload ?? [];
 
@@ -103,7 +110,7 @@ const ProtectedRoute: React.FC = () => {
   /** Start polling */
   useEffect(() => {
     fetchPending();
-    intervalRef.current = window.setInterval(fetchPending, 2000);
+    intervalRef.current = window.setInterval(fetchPending, 10000);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -133,6 +140,7 @@ const ProtectedRoute: React.FC = () => {
     processingRef.current.add(o.id);
     markSeen(o.id);
     setClosingId(o.id); // animate out
+    console.log(o);
 
     try {
       const res = await axios.post(`${baseUrl}/merchant/accept-buy-order`, {
@@ -147,7 +155,7 @@ const ProtectedRoute: React.FC = () => {
         if (o.order_type === "buy") navigate(`/confirmation/${o.order_id}`);
         else if (o.order_type === "sell")
           navigate(
-            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
+            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}`
           );
         else
           navigate(

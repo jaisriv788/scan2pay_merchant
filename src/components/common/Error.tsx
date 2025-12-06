@@ -16,7 +16,7 @@ const Error: React.FC = () => {
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: 80, opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed z-500 top-2 right-3"
+        className="fixed max-w-80 z-500 top-2 right-3"
       >
         <Alert
           className="border-red-500 z-500 bg-red-300/90"
@@ -25,7 +25,7 @@ const Error: React.FC = () => {
           <AlertCircleIcon />
           <AlertTitle className="text-nowrap">{msg.title}</AlertTitle>
           <AlertDescription>
-            <p className="text-nowrap">{msg.msg}</p>
+            <p className="text-wrap">{msg.msg}</p>
           </AlertDescription>
         </Alert>
       </motion.div>

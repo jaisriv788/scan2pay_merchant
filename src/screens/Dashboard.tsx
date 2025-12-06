@@ -10,8 +10,10 @@ import {
   Receipt,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { Root } from "react-dom/client";
 import { BiRupee } from "react-icons/bi";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 interface DashboardProps {
   usdtAmount?: number;
@@ -27,10 +29,15 @@ export default function DashboardPage() {
 
   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
   const token = useSelector((state: RootState) => state?.user?.token);
+  const ordersCount = useSelector(
+    (state: RootState) => state.consts.ordersCount
+  );
+
+  const navigate = useNavigate();
 
   async function fetchData() {
     try {
-      // console.log(loading)
+      console.log(loading);
       setloading(true);
       const response = await axios.post(
         `${baseUrl}/merchant/index`,
@@ -42,7 +49,7 @@ export default function DashboardPage() {
           },
         }
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
 
       if (response.data.status == "false") {
         setData(null);
@@ -134,40 +141,75 @@ export default function DashboardPage() {
             </CardTitle>
             <BiRupee
               size={24}
-              className="text-orange-600 animate-[pulse_2s_infinite]"
+              className="text-red-600 animate-[pulse_2s_infinite]"
             />
           </CardHeader>
           <CardContent>
             <p className="md:text-4xl overflow-hidden text-2xl font-bold text-gray-900 tracking-tight">
-              ₹ {data?.inr.toFixed(4) ?? 0.0000}
+              ₹ {data?.inr.toFixed(4) ?? 0.0}
             </p>
           </CardContent>
         </MagicCard>
 
         {/* Transaction Count */}
-        <MagicCard
-          gradientColor="#b5cdf8"
-          className="p-5 rounded-2xl backdrop-blur-md border border-blue-500/40
+        <div className="flex gap-3">
+          <div
+            className="flex-2"
+            onClick={() => {
+              navigate("/transactions");
+            }}
+          >
+            <MagicCard
+              gradientColor="#b5cdf8"
+              className="p-5 h-full cursor-pointer rounded-2xl backdrop-blur-md border border-blue-500/40
                     bg-white/60 hover:bg-blue-50 hover:shadow-xl transition-all duration-300"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-1">
-            <CardTitle className="text-lg font-semibold text-blue-700">
-              Total Transactions
-            </CardTitle>
-            <Receipt
-              size={24}
-              className="text-blue-600 animate-[pulse_2s_infinite]"
-            />
-          </CardHeader>
-          <CardContent>
-            <p className="md:text-4xl text-2xl font-bold text-gray-900 tracking-tight">
-              {data?.transactionCount ?? 0}
-            </p>
-          </CardContent>
-        </MagicCard>
-
+            >
+              <CardHeader className="flex flex-row items-center justify-between pb-1">
+                <CardTitle className="text-lg font-semibold text-blue-700">
+                  Total Transactions
+                </CardTitle>
+                <Receipt
+                  size={24}
+                  className="text-blue-600 animate-[pulse_2s_infinite]"
+                />
+              </CardHeader>
+              <CardContent>
+                <p className="md:text-4xl text-2xl font-bold text-gray-900 tracking-tight">
+                  {data?.transactionCount ?? 0}
+                </p>
+              </CardContent>
+            </MagicCard>
+          </div>
+          <div
+            className="flex-1"
+            onClick={() => {
+              navigate("/pending-request");
+            }}
+          >
+            <MagicCard
+              gradientColor="#b5cdf8"
+              className="p-5 h-full flex cursor-pointer items-center justify-center rounded-2xl backdrop-blur-md border border-blue-500/40
+                    bg-white/60 hover:bg-blue-50 hover:shadow-xl transition-all duration-300"
+            >
+              <CardHeader className="flex flex-row items-center justify-center">
+                <CardTitle className="text-lg flex gap-2 items-center font-semibold text-blue-700">
+                  Orders
+                  <Receipt
+                    size={24}
+                    className="text-blue-600 animate-[pulse_2s_infinite]"
+                  />
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="md:text-4xl text-2xl font-bold text-gray-900 tracking-tight">
+                  {ordersCount ?? 0}
+                </p>
+              </CardContent>
+            </MagicCard>
+          </div>
+        </div>
         {/* Total Business */}
-        <MagicCard
+        {/* <MagicCard
           gradientColor="#f5d3b0"
           className="p-5 rounded-2xl backdrop-blur-md border border-orange-500/40
                     bg-white/60 hover:bg-orange-50 hover:shadow-xl transition-all duration-300"
@@ -191,7 +233,7 @@ export default function DashboardPage() {
                 : "Loading..."}
             </p>
           </CardContent>
-        </MagicCard>
+        </MagicCard> */}
       </div>
     </div>
   );

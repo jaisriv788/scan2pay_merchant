@@ -50,7 +50,7 @@ const Transaction: React.FC = () => {
           },
         }
       );
-      console.log(response.data.data);
+      // console.log(response.data.data);
 
       if (response.data.status == "false") {
         setTransaction([]);

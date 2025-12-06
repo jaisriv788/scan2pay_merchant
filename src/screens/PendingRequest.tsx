@@ -35,7 +35,11 @@ const PendingRequest: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.userData);
 
   const [data, setData] = React.useState([]);
-
+  const [sortType, setSortType] = React.useState("default");
+  const [typeFilter, setTypeFilter] = React.useState("all"); // <-- NEW
+  const [loading, setLoading] = React.useState(false);
+  const [loadingBtn, setLoadingBtn] = React.useState(false);
+  const [show, setShow] = React.useState(false);
   const { showSuccess } = useShowSuccess();
   const { showError } = useShowError();
 
@@ -43,8 +47,9 @@ const PendingRequest: React.FC = () => {
 
   const fetchPending = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(
-        `${baseUrl}/merchant/pending-orders`,
+        `${baseUrl}/merchant/other-pending-orders`,
         {},
         {
           headers: {
@@ -53,18 +58,18 @@ const PendingRequest: React.FC = () => {
           },
         }
       );
-
-      console.log("Pending orders response:", response.data);
-      setData(response.data.data.pendingOrders || []);
+      setData(response?.data?.data?.pendingOrders || []);
     } catch (err) {
       console.error("Pending fetch failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  /** Start polling */
   useEffect(() => {
     fetchPending();
-    setInterval(() => fetchPending(), 10000);
+    const interval = setInterval(() => fetchPending(), 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const markSeen = (id: number) => {
@@ -75,21 +80,19 @@ const PendingRequest: React.FC = () => {
 
   const handleAccept = async (o: Order) => {
     markSeen(o.id);
-
+    console.log(o);
     try {
       const res = await axios.post(`${baseUrl}/merchant/accept-buy-order`, {
         order_id: o?.order_id,
         merchant_id: user?.id,
       });
 
-      console.log("Accept response:", res.data);
-
       if (res.data.status) {
         showSuccess("Order accepted successfully", "");
         if (o.order_type === "buy") navigate(`/confirmation/${o.order_id}`);
         else if (o.order_type === "sell")
           navigate(
-            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.amount}`
+            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}`
           );
         else
           navigate(
@@ -103,15 +106,93 @@ const PendingRequest: React.FC = () => {
     }
   };
 
+  // SORT + TYPE FILTER
+  const filteredData = data.filter((item) => {
+    if (typeFilter === "all") return true;
+    return item.order_type?.toLowerCase() === typeFilter;
+  });
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortType === "asc") return a.amount - b.amount;
+    if (sortType === "desc") return b.amount - a.amount;
+    return 0;
+  });
+
+  async function handleClearRequest() {
+    try {
+      setLoadingBtn(true);
+
+      await axios.post(
+        `${baseUrl}/merchant/reject-accepted-order`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (show)
+        showSuccess(
+          "Success",
+          "Successfully cleared the last order. Now you can accept orders again."
+        );
+    } catch (error) {
+      console.log(error);
+      showError("Error", "Something went wrong while clearing the last order.");
+    } finally {
+      setLoadingBtn(false);
+    }
+  }
+
+  useEffect(() => {
+    handleClearRequest();
+    setShow(true);
+  }, []);
+
   return (
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
+      {/* FILTER UI */}
+      <div className="flex flex-col h-fit mb-3 items-center sm:flex-row justify-between gap-3">
+        <Button
+          onClick={handleClearRequest}
+          disabled={loadingBtn}
+          className="hover:bg-[#4D43EF]/70 bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300"
+        >
+          {loadingBtn ? "Clearing Order ..." : "Clear Last Order"}
+        </Button>
+
+        {/* SORT SELECT */}
+        <select
+          value={sortType}
+          onChange={(e) => setSortType(e.target.value)}
+          className="border px-3 py-1 rounded-md"
+        >
+          <option value="default">Default Order</option>
+          <option value="asc">Amount: Low → High</option>
+          <option value="desc">Amount: High → Low</option>
+        </select>
+
+        {/* TYPE FILTER SELECT — NEW */}
+        <select
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+          className="border px-3 py-1 rounded-md"
+        >
+          <option value="all">All Types</option>
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+          <option value="scan">Scan</option>
+        </select>
+      </div>
+
       <div className="w-full rounded-xl border p-4 shadow-sm bg-white overflow-x-auto">
         <h2 className="text-lg font-semibold mb-4">Pending Requests</h2>
 
         <Table>
           <TableHeader>
             <TableRow>
-              {/* <TableHead>ID</TableHead> */}
               <TableHead>Order ID</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Amount</TableHead>
@@ -123,16 +204,23 @@ const PendingRequest: React.FC = () => {
           </TableHeader>
 
           <TableBody>
-            {data.length == 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center pt-5">
-                  No data found
-                </TableCell>
-              </TableRow>
+            {sortedData.length === 0 ? (
+              loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center pt-5">
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center pt-5">
+                    No data found
+                  </TableCell>
+                </TableRow>
+              )
             ) : (
-              data.map((item) => (
+              sortedData.map((item) => (
                 <TableRow key={item.id}>
-                  {/* <TableCell>{item.id}</TableCell> */}
                   <TableCell>{item.order_id}</TableCell>
                   <TableCell className="capitalize">
                     {item.order_type}

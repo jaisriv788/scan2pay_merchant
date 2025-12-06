@@ -118,8 +118,9 @@ const Confirmation: React.FC = () => {
             >
               <p className="text-lg font-semibold">Loading...</p>
               <p className="text-gray-500 text-sm mt-1">
-                Please wait while we are preparing things. And do not close the
-                page.
+                Please wait while we are preparing things & don't close the
+                page. <br />
+                As the user will be processing payment it can take a while.
               </p>
             </motion.div>
           </motion.div>

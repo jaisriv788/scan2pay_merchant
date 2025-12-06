@@ -9,16 +9,16 @@ import Success from "./components/common/Success";
 import PublicRoute from "./components/common/PublicRoute";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Verification from "./components/common/Verification";
-import Profile from "./screens/Profile";
-import Transaction from "./screens/Transaction";
-import Wallet from "./screens/Wallet";
-import Confirmation from "./screens/Confirmation";
-import TrxConfirm from "./components/common/TrxConfirm";
-import TrxError from "./components/common/TrxError";
-import SellConfirmation from "./screens/SellConfirmation";
-import ScanConfirmation from "./screens/ScanConfirmation";
-import OrderDetails from "./screens/OrderDetails";
-import PendingRequest from "./screens/PendingRequest";
+const Profile = React.lazy(() => import("./screens/Profile"));
+const Transaction = React.lazy(() => import("./screens/Transaction"));
+const Wallet = React.lazy(() => import("./screens/Wallet"));
+const Confirmation = React.lazy(() => import("./screens/Confirmation"));
+const TrxConfirm = React.lazy(() => import("./components/common/TrxConfirm"));
+const TrxError = React.lazy(() => import("./components/common/TrxError"));
+const SellConfirmation = React.lazy(() => import("./screens/SellConfirmation"));
+const ScanConfirmation = React.lazy(() => import("./screens/ScanConfirmation"));
+const OrderDetails = React.lazy(() => import("./screens/OrderDetails"));
+const PendingRequest = React.lazy(() => import("./screens/PendingRequest"));
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -45,30 +45,39 @@ const App: React.FC = () => {
       {showSuccess && <Success />}
       <TrxConfirm open={showTrxSuccess} />
       <TrxError open={showTrxFail} />
-      <Routes>
-        <Route element={<PublicRoute />}>
-          <Route path="/" element={<Login />} />
-          <Route path="/auth/verification" element={<Verification />} />
-        </Route>
+      <React.Suspense
+        fallback={
+          <div className="flex items-center justify-center text-xl font-semibold">
+            Loading...
+          </div>
+        }
+      >
+        <Routes>
+          <Route element={<PublicRoute />}>
+            <Route path="/" element={<Login />} />
+            <Route path="/auth/verification" element={<Verification />} />
+          </Route>
 
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/transactions" element={<Transaction />} />
-          <Route path="/wallet" element={<Wallet />} />
-          <Route path="/confirmation/:orderid" element={<Confirmation />} />
-          <Route
-            path="/sell-confirmation/:orderid/:upi_id/:amount"
-            element={<SellConfirmation />}
-          />
-          <Route path="/order/:order_id?" element={<OrderDetails />} />
-          <Route
-            path="/scan-confirmation/:order_id/:upi_id/:amount"
-            element={<ScanConfirmation />}
-          />
-          <Route path="/pending-request" element={<PendingRequest />} />
-        </Route>
-      </Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/transactions" element={<Transaction />} />
+            <Route path="/wallet" element={<Wallet />} />
+            <Route path="/confirmation/:orderid" element={<Confirmation />} />
+            <Route
+              path="/sell-confirmation/:orderid/:upi_id/:amount"
+              element={<SellConfirmation />}
+            />
+            <Route path="/order/:order_id?" element={<OrderDetails />} />
+            <Route
+              path="/scan-confirmation/:order_id/:upi_id/:amount"
+              element={<ScanConfirmation />}
+            />
+
+            <Route path="/pending-request" element={<PendingRequest />} />
+          </Route>
+        </Routes>
+      </React.Suspense>
     </>
   );
 };
