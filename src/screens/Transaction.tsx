@@ -17,10 +17,11 @@ import { useNavigate } from "react-router";
 interface Transaction {
   amount: number; //
   type: string; //
-  trans_id: string; //
+  income_id: string; //
   transaction_type: "USDT" | "USDC";
   transaction_hash: string;
   payment_method: string;
+  inr_amount: number;
 }
 
 const Transaction: React.FC = () => {
@@ -38,9 +39,9 @@ const Transaction: React.FC = () => {
     try {
       setloading(true);
       const response = await axios.post(
-        `${baseUrl}/transactions-list`,
+        `${baseUrl}/merchant/transactions-list`,
         {
-          user_id: userData?.id,
+          // user_id: userData?.id,
           count,
         },
         {
@@ -50,7 +51,7 @@ const Transaction: React.FC = () => {
           },
         }
       );
-      // console.log(response.data.data);
+      console.log(response.data.data);
 
       if (response.data.status == "false") {
         setTransaction([]);
@@ -115,7 +116,7 @@ const Transaction: React.FC = () => {
                 <TableRow>
                   <TableHead>Trx Id</TableHead>
                   <TableHead>Trx Type</TableHead>
-                  {/* <TableHead>Type</TableHead> */}
+                  <TableHead>INR</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead className="text-center">Hash</TableHead>
                 </TableRow>
@@ -125,17 +126,17 @@ const Transaction: React.FC = () => {
                   return (
                     <TableRow
                       onClick={() => {
-                        navigate("/order/" + item.trans_id);
+                        navigate("/order/" + item.income_id);
                       }}
                       className="odd:bg-[#4D43EF]/10 hover:bg-gray-100 cursor-pointer"
                       key={index}
                     >
-                      <TableCell>{item?.trans_id ?? "-"}</TableCell>
-                      {/* <TableCell className="text-center">
-                                                {item?.payment_method?.toString()?.toUpperCase() ?? "-"}
-                                            </TableCell> */}
+                      <TableCell>{item?.income_id ?? "-"}</TableCell>
                       <TableCell>
                         {item?.type[0].toUpperCase() + item?.type.slice(1)}
+                      </TableCell>
+                      <TableCell className="">
+                       ₹{item?.inr_amount ?? "-"}
                       </TableCell>
                       <TableCell>
                         ${item?.amount?.toFixed(2) ?? "00.00"}

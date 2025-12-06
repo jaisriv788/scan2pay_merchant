@@ -275,7 +275,7 @@ const ScanConfirmation: React.FC = () => {
             </div>
           </div> */}
           <div className="space-y-2">
-            <Label>Transaction Id</Label>
+            <Label>UPI Id</Label>
             <Input
               type="text"
               value={upiId}

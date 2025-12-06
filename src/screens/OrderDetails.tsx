@@ -35,6 +35,7 @@ const OrderDetails: React.FC = () => {
           },
         }
       );
+      console.log(response.data.data);
       setData(response.data.data);
     } catch (error) {
       console.log("Error fetching order details:", error);
@@ -72,8 +73,20 @@ const OrderDetails: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center justify-between">
+          <p className="font-semibold">INR Amount</p>
+          <p>₹ {data?.inr_amount.toFixed(4) ?? "0.0000"}</p>
+        </div>
+        <div className="flex items-center justify-between">
           <p className="font-semibold">Fees</p>
           <p>₹ {data?.charge.toFixed(4) ?? "0.0000"}</p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="font-semibold">From Upi</p>
+          <p>{data?.from_upi_id ?? "-"}</p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="font-semibold">To Upi</p>
+          <p>{data?.to_upi_id ?? "-"}</p>
         </div>
         <div className="flex items-center justify-between">
           <p className="font-semibold">Hash</p>
