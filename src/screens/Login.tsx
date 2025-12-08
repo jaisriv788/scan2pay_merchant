@@ -12,7 +12,7 @@ const Login: React.FC = () => {
             <TextAnimate>Scan2Pay Merchant</TextAnimate>
           </div>
           <TextAnimate className="font-semibold mt-3">
-            Sell your USDT/USDC ↔ INR(₹) Instantly
+            Sell your USDT Bep20 ↔ INR(₹) Instantly
           </TextAnimate>
         </div>
         <div className="my-10 sm:my-15">

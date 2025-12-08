@@ -149,7 +149,7 @@ const ScanConfirmation: React.FC = () => {
         );
         console.log("Response data:", response.data);
         if (response.data.status) {
-          setData(response.data.data);
+          setData(response.data.data.order);
           setLoading(false);
           clearInterval(interval);
         }
@@ -206,7 +206,9 @@ const ScanConfirmation: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-        <div className="loader mb-4"></div>
+        <video autoPlay loop muted playsInline className="z-50 w-50  mx-auto">
+          <source src="/merchant/loader2.webm" type="video/webm" />
+        </video>
         <p className="text-slate-600 text-lg">Please wait ...</p>
 
         <style>{`
@@ -249,11 +251,24 @@ const ScanConfirmation: React.FC = () => {
             />
           </div>
 
-          <div className="text-center text-lg font-medium text-slate-700">
-            Amount to Pay:{" "}
-            <span className="font-bold text-green-700">₹{data?.amount}</span>
+          <div className="text-base">
+            <div className="flex justify-between  font-medium text-slate-700">
+              Order Id{" "}
+              <span className="font-bold text-green-700">{data?.order_id}</span>
+            </div>
+            <div className="flex justify-between  font-medium text-slate-700">
+              Amount to Pay{" "}
+              <span className="font-bold  text-green-700">
+                ₹{data?.inr_amount}
+              </span>
+            </div>
+            <div className="flex justify-between  font-medium text-slate-700">
+              You Receive{" "}
+              <span className="font-bold  text-green-700">
+                {data?.amount} {data.type.toUpperCase()}
+              </span>
+            </div>
           </div>
-
           <div className="flex items-center bg-slate-100 p-3 rounded-xl border">
             <span className="flex-1 font-medium text-slate-800 overflow-hidden">
               {data?.scan_upi}

@@ -116,7 +116,15 @@ const Confirmation: React.FC = () => {
               transition={{ delay: 0.3 }}
               className="mt-6 text-center"
             >
-              <p className="text-lg font-semibold">Loading...</p>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="z-50 w-50 mx-auto"
+              >
+                <source src="/merchant/loader2.webm" type="video/webm" />
+              </video>
               <p className="text-gray-500 text-sm mt-1">
                 Please wait while we are preparing things & don't close the
                 page. <br />

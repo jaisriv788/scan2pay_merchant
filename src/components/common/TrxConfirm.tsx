@@ -33,7 +33,9 @@ export default function SuccessModal({ open }: ModalProps) {
           transition={{ duration: 0.3 }}
           className="flex flex-col items-center space-y-3"
         >
-          <CheckCircle className="w-16 h-16 text-green-500" />
+          <video autoPlay muted playsInline className="z-50 w-30 h-30">
+            <source src="/merchant/success.webm" type="video/webm" />
+          </video>
 
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">

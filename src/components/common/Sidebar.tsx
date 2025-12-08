@@ -159,7 +159,7 @@ const Sidebar: React.FC = () => {
             <div className="px-5 py-5 md:py-4 border-b border-gray-300 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img className="logo" src="icon.jpeg" alt="icon" width={40} />
-                <div className="font-bold">Scan2Pay</div>
+                <div className="font-bold">Scan2Pay Direct</div>
               </div>
               <IoCloseCircleSharp
                 onClick={handleClose}
