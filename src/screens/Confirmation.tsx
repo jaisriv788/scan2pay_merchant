@@ -166,6 +166,12 @@ const Confirmation: React.FC = () => {
                 </span>
                 <span className="font-semibold">{data.upi_id ?? "-"}</span>
               </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">
+                  INR Amount
+                </span>
+                <span className="font-semibold">{data.inr_amount ?? "-"}</span>
+              </div>
             </div>
 
             <Button
