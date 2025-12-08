@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { TextAnimate } from "../ui/text-animate";
+// import { TextAnimate } from "../ui/text-animate";
 import { ShimmerButton } from "../ui/shimmer-button";
 import { useNavigate, useLocation } from "react-router";
 import { Menu } from "lucide-react";
@@ -170,7 +170,7 @@ const Navbar: React.FC = () => {
               }}
             >
               <img className="" src="icon.jpeg" alt="icon" width={50} />
-              <TextAnimate className="hidden sm:block">Scan2Pay Direct</TextAnimate>
+              {/* <TextAnimate className="hidden sm:block">Scan2Pay Direct</TextAnimate> */}
             </div>
           ) : (
             <div>{title}</div>

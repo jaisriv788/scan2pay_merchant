@@ -6,7 +6,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+// import { CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
