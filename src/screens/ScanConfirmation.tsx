@@ -229,7 +229,7 @@ const ScanConfirmation: React.FC = () => {
     );
   }
 
-  const upiQR = `upi://pay?pa=${data?.scan_upi}&pn=Merchant&am=${data?.amount}&cu=INR`;
+  const upiQR = `upi://pay?pa=${data?.scan_upi}&pn=Merchant&am=${data?.inr_amount}&cu=INR`;
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-100 pt-18 p-3">
