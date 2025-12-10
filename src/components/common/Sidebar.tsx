@@ -52,14 +52,6 @@ const Sidebar: React.FC = () => {
       },
     },
     {
-      id: 3,
-      icon: GiReceiveMoney,
-      tag: "Transactions",
-      click: () => {
-        navigate("/transactions");
-      },
-    },
-    {
       id: 4,
       icon: BiWallet,
       tag: "Wallet",
@@ -67,7 +59,23 @@ const Sidebar: React.FC = () => {
         navigate("/wallet");
       },
     },
+    {
+      id: 3,
+      icon: GiReceiveMoney,
+      tag: "Transactions",
+      click: () => {
+        navigate("/transactions");
+      },
+    },
 
+    {
+      id: 7,
+      icon: BiWallet,
+      tag: "Funds Detail",
+      click: () => {
+        navigate("/funds-detail");
+      },
+    },
     // {
     //   id: 4,
     //   icon: BiSupport,

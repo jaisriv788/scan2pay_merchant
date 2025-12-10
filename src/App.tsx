@@ -19,6 +19,7 @@ const SellConfirmation = React.lazy(() => import("./screens/SellConfirmation"));
 const ScanConfirmation = React.lazy(() => import("./screens/ScanConfirmation"));
 const OrderDetails = React.lazy(() => import("./screens/OrderDetails"));
 const PendingRequest = React.lazy(() => import("./screens/PendingRequest"));
+const Funds = React.lazy(() => import("./screens/Funds"));
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -73,7 +74,7 @@ const App: React.FC = () => {
               path="/scan-confirmation/:order_id/:upi_id/:amount"
               element={<ScanConfirmation />}
             />
-
+            <Route path="/funds-detail" element={<Funds />} />
             <Route path="/pending-request" element={<PendingRequest />} />
           </Route>
         </Routes>
