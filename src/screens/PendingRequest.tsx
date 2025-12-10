@@ -58,6 +58,7 @@ const PendingRequest: React.FC = () => {
           },
         }
       );
+      console.log(response?.data?.data?.pendingOrders )
       setData(response?.data?.data?.pendingOrders || []);
     } catch (err) {
       console.error("Pending fetch failed:", err);
@@ -92,7 +93,7 @@ const PendingRequest: React.FC = () => {
         if (o.order_type === "buy") navigate(`/confirmation/${o.order_id}`);
         else if (o.order_type === "sell")
           navigate(
-            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}`
+            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}/${o.amount}/${o.type}`
           );
         else
           navigate(

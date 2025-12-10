@@ -154,20 +154,32 @@ const Confirmation: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-medium text-muted-foreground">
-                  Amount
-                </span>
-                <span className="font-semibold">{data.amount}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium text-muted-foreground">Type</span>
-                <span className="font-semibold uppercase">{data.type}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium text-muted-foreground">
                   UPI Reference
                 </span>
                 <span className="font-semibold">{data.upi_reference}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">
+                  Transfer To User
+                </span>
+                <span className="font-semibold">
+                  {data.amount.toFixed(6)} {data.type.toUpperCase()}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">Fee</span>
+                <span className="font-semibold uppercase">
+                  {((data.amount * data.fees) / 100).toFixed(6)} {data.type.toUpperCase()}
+                </span>
               </div>{" "}
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">
+                  Total Amount Deduction
+                </span>
+                <span className="font-semibold uppercase">
+                  {(((data.amount * data.fees) / 100) + data.amount).toFixed(6)} {data.type.toUpperCase()}
+                </span>
+              </div>
               <div className="flex flex-col">
                 <span className="font-medium text-muted-foreground">
                   UPI Id
@@ -178,7 +190,9 @@ const Confirmation: React.FC = () => {
                 <span className="font-medium text-muted-foreground">
                   INR Amount
                 </span>
-                <span className="font-semibold">{data.inr_amount ?? "-"}</span>
+                <span className="font-semibold">
+                  ₹ {data.inr_amount ?? "-"}
+                </span>
               </div>
             </div>
 

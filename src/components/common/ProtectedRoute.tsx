@@ -155,7 +155,7 @@ const ProtectedRoute: React.FC = () => {
         if (o.order_type === "buy") navigate(`/confirmation/${o.order_id}`);
         else if (o.order_type === "sell")
           navigate(
-            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}`
+            `/sell-confirmation/${o.order_id}/${res.data.upi_id}/${o.inr_amount}/${o.amount}/${o.type}`
           );
         else
           navigate(

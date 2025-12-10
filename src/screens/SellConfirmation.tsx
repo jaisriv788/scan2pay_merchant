@@ -14,21 +14,29 @@ import { setTrxFail } from "@/store/slices/modelSlice";
 
 const SellConfirmation: React.FC = () => {
   const navigate = useNavigate();
-  const { orderid, upi_id, amount } = useParams<{
+  const { orderid, upi_id, amount, usdt, type } = useParams<{
     orderid?: string;
     upi_id?: string;
     amount?: string;
+    usdt?: string;
+    type?: "usdt" | "usdc" | "gbk";
   }>();
 
   const [orderData, setOrderData] = useState<{
     order_id?: string | null;
     upi_id?: string | null;
     inr_amount?: string | null;
+    usdt?: string | null;
+    type?: "usdt" | "usdc" | "gbk";
   }>({
     order_id: null,
     upi_id: null,
     inr_amount: null,
+    usdt: null,
+    type: "usdt",
   });
+
+  const [fees, setFees] = useState<number>(0);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,12 +53,24 @@ const SellConfirmation: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
+  async function fetchFees() {
+    try {
+      const response = await axios.get(`${baseUrl}/get-fee`);
+      // console.log(response.data)
+      setFees(response.data.fee);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     // console.log(imagePreview);
+    fetchFees();
     setOrderData({
       order_id: orderid ?? null,
       upi_id: upi_id ?? null,
       inr_amount: amount ?? null,
+      usdt: usdt ?? null,
+      type: type ?? null,
     });
   }, [orderid, upi_id, amount]);
 
@@ -209,10 +229,42 @@ const SellConfirmation: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="mt-3 text-sm text-gray-500">
+                <div className="mt-3 text-sm text-gray-500 flex justify-between items-center">
                   Amount
                   <div className="mt-1 text-lg font-extrabold text-[#4D43EF]">
                     {orderData.inr_amount ? `₹ ${orderData.inr_amount}` : "-"}
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500 flex justify-between items-center">
+                  Base Amount
+                  <div className="mt-1 font-bold text-[#4D43EF]">
+                    {orderData.usdt
+                      ? `${parseFloat(orderData.usdt).toFixed(6)}`
+                      : "-"}{" "}
+                    {orderData.type.toUpperCase()}
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500 flex justify-between items-center">
+                  Fees
+                  <div className="mt-1 font-bold text-[#4D43EF]">
+                    {orderData.usdt
+                      ? `${((parseFloat(orderData.usdt) * fees) / 100).toFixed(
+                          6
+                        )}`
+                      : "-"}{" "}
+                    {orderData.type.toUpperCase()}
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500 flex justify-between items-center">
+                  You Receive
+                  <div className="mt-1 font-bold text-[#4D43EF]">
+                    {orderData.usdt
+                      ? `${(
+                          parseFloat(orderData.usdt) -
+                          (parseFloat(orderData.usdt) * fees) / 100
+                        ).toFixed(6)}`
+                      : "-"}{" "}
+                    {orderData.type.toUpperCase()}
                   </div>
                 </div>
               </div>

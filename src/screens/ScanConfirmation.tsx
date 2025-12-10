@@ -120,6 +120,7 @@ const ScanConfirmation: React.FC = () => {
   const [btnLoading, setBtnLoading] = useState(false);
   //   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [upiId, setUpiId] = useState("");
+  const [fees, setFees] = useState<number>(0);
 
   const navigate = useNavigate();
   const { showSuccess } = useShowSuccess();
@@ -135,6 +136,8 @@ const ScanConfirmation: React.FC = () => {
   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
 
   useEffect(() => {
+    fetchFees();
+
     const fetchData = async () => {
       try {
         const response = await axios.post(
@@ -164,6 +167,16 @@ const ScanConfirmation: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  async function fetchFees() {
+    try {
+      const response = await axios.get(`${baseUrl}/get-fee`);
+      // console.log(response.data)
+      setFees(response.data.fee);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleCopy = () => {
     if (data?.scan_upi) navigator.clipboard.writeText(data.scan_upi);
@@ -263,9 +276,23 @@ const ScanConfirmation: React.FC = () => {
               </span>
             </div>
             <div className="flex justify-between  font-medium text-slate-700">
+              Base Amount{" "}
+              <span className="font-bold  text-green-700">
+                {data?.amount.toFixed(6)} {data.type.toUpperCase()}
+              </span>
+            </div>
+            <div className="flex justify-between  font-medium text-slate-700">
+              Fees{" "}
+              <span className="font-bold  text-green-700">
+                {((data?.amount * fees) / 100).toFixed(6)}{" "}
+                {data.type.toUpperCase()}
+              </span>
+            </div>
+            <div className="flex justify-between  font-medium text-slate-700">
               You Receive{" "}
               <span className="font-bold  text-green-700">
-                {data?.amount} {data.type.toUpperCase()}
+                {(data?.amount - (data?.amount * fees) / 100).toFixed(6)}{" "}
+                {data.type.toUpperCase()}
               </span>
             </div>
           </div>
