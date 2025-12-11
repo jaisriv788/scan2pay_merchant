@@ -4,11 +4,15 @@ import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
 import { useSelector } from "react-redux";
 import type { RootState } from "./store/store";
-import Error from "./components/common/Error";
-import Success from "./components/common/Success";
-import PublicRoute from "./components/common/PublicRoute";
-import ProtectedRoute from "./components/common/ProtectedRoute";
-import Verification from "./components/common/Verification";
+const Error = React.lazy(() => import("./components/common/Error"));
+const Success = React.lazy(() => import("./components/common/Success"));
+const PublicRoute = React.lazy(() => import("./components/common/PublicRoute"));
+const ProtectedRoute = React.lazy(
+  () => import("./components/common/ProtectedRoute")
+);
+const Verification = React.lazy(
+  () => import("./components/common/Verification")
+);
 const Profile = React.lazy(() => import("./screens/Profile"));
 const Transaction = React.lazy(() => import("./screens/Transaction"));
 const Wallet = React.lazy(() => import("./screens/Wallet"));
