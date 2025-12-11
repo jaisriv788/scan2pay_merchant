@@ -128,12 +128,20 @@ const ScanConfirmation: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
   const { order_id } = useParams<{
     order_id: string;
   }>();
 
   const tokenHeader = useSelector((state: RootState) => state?.user?.token);
   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
+
+  const openPaytm = () => {
+    const upiLink = `upi://pay?pa=${data?.scan_upi}&am=${data?.inr_amount}&cu=INR&tn=Test%20Payment`;
+
+    window.location.href = upiLink;
+  };
 
   useEffect(() => {
     fetchFees();
@@ -298,6 +306,14 @@ const ScanConfirmation: React.FC = () => {
               </span>
             </div>
           </div>
+          {isMobile && (
+            <button
+              onClick={openPaytm}
+              className="mt-3 hover:bg-sky-600 transition ease-in-out duration-300 cursor-pointer  bg-sky-500 text-semibold text-white w-full py-2 rounded-lg"
+            >
+              Pay with UPI App
+            </button>
+          )}
           <div className="flex items-center bg-slate-100 p-3 rounded-xl border">
             <span className="flex-1 font-medium text-slate-800 overflow-hidden">
               {data?.scan_upi}

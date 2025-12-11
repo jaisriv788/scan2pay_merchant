@@ -53,6 +53,8 @@ const SellConfirmation: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
+  const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
   async function fetchFees() {
     try {
       const response = await axios.get(`${baseUrl}/get-fee`);
@@ -73,6 +75,12 @@ const SellConfirmation: React.FC = () => {
       type: type ?? null,
     });
   }, [orderid, upi_id, amount]);
+
+  const openPaytm = () => {
+    const upiLink = `upi://pay?pa=${orderData?.upi_id}&am=${orderData?.inr_amount}&cu=INR&tn=Test%20Payment`;
+
+    window.location.href = upiLink;
+  };
 
   // useEffect(() => {
   //   if (!imageFile) {
@@ -182,7 +190,7 @@ const SellConfirmation: React.FC = () => {
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-50 py-12">
       {confirmed && (
-        <div className="absolute inset-0 bg-black/60 flex z-[500] justify-center items-center backdrop-blur">
+        <div className="absolute inset-0 bg-black/60 flex z-500 justify-center items-center backdrop-blur">
           {" "}
           <div className="bg-white rounded-lg p-7">
             <img
@@ -225,6 +233,15 @@ const SellConfirmation: React.FC = () => {
                   level="H"
                 />
               </div>
+
+              {isMobile && (
+                <button
+                  onClick={openPaytm}
+                  className="mt-3 hover:bg-sky-600 transition ease-in-out duration-300 cursor-pointer  bg-sky-500 text-semibold text-white w-full py-2 rounded-lg"
+                >
+                  Pay with UPI App
+                </button>
+              )}
 
               <div className="w-full text-center">
                 <div className="text-sm text-gray-500">UPI ID</div>
