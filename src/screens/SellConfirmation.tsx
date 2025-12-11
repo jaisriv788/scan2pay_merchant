@@ -181,6 +181,18 @@ const SellConfirmation: React.FC = () => {
   }, [confirmed]);
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-50 py-12">
+      {confirmed && (
+        <div className="absolute inset-0 bg-black/60 flex z-[500] justify-center items-center backdrop-blur">
+          {" "}
+          <div className="bg-white rounded-lg p-7">
+            <img
+              src="/merchant/process.gif"
+              className="aspect-square w-20 mx-auto mb-5"
+            />
+            <div>Please Wait for Seller To Approve...</div>
+          </div>
+        </div>
+      )}
       <div className="w-full max-w-3xl bg-white shadow-md rounded-2xl  mt-18 border border-gray-100 overflow-hidden">
         <div className="p-6 md:p-10">
           {/* Header */}

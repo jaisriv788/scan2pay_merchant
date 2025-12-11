@@ -83,7 +83,8 @@ export default function DashboardPage() {
         {/* USDT */}
         <MagicCard
           gradientColor="#b7b3ff"
-          className="p-5 rounded-2xl backdrop-blur-md border border-[#4D43EF]/40 
+          goto="funds-detail"
+          className="p-5 cursor-pointer rounded-2xl backdrop-blur-md border border-[#4D43EF]/40 
                     bg-white/60 hover:bg-[#4D43EF]/5 hover:shadow-xl transition-all duration-300"
         >
           <CardHeader className="flex flex-row items-center justify-between pb-1">
@@ -105,7 +106,8 @@ export default function DashboardPage() {
         {/* USDC */}
         <MagicCard
           gradientColor="#a4f0b0"
-          className="p-5 rounded-2xl backdrop-blur-md border border-green-500/40 
+          goto="funds-detail"
+          className="p-5 cursor-pointer rounded-2xl backdrop-blur-md border border-green-500/40 
                     bg-white/60 hover:bg-green-50 hover:shadow-xl transition-all duration-300"
         >
           <CardHeader className="flex flex-row items-center justify-between pb-1">
@@ -125,8 +127,9 @@ export default function DashboardPage() {
         </MagicCard>
 
         <MagicCard
+          goto="funds-detail"
           gradientColor="#f45858"
-          className="p-5 rounded-2xl backdrop-blur-md border border-red-500/40
+          className="p-5 rounded-2xl cursor-pointer backdrop-blur-md border border-red-500/40
                     bg-white/60 hover:bg-orange-50 hover:shadow-xl transition-all duration-300"
         >
           <CardHeader className="flex flex-row items-center justify-between pb-1">

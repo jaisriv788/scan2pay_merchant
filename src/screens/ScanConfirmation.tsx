@@ -219,10 +219,12 @@ const ScanConfirmation: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-        <video autoPlay loop muted playsInline className="z-50 w-50  mx-auto">
-          <source src="/merchant/loader2.webm" type="video/webm" />
-        </video>
+        <img
+          src="/merchant/process.gif"
+          className="aspect-square w-20 mx-auto mb-5"
+        />
         <p className="text-slate-600 text-lg">Please wait ...</p>
+        <p className="text-slate-600 text-lg">While the User uploads the QR.</p>
 
         <style>{`
           .loader {

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
 import { setTrxSuccess, setTrxFail } from "../../src/store/slices/modelSlice";
-
+// import process from "@/"
 const Confirmation: React.FC = () => {
   const { orderid } = useParams();
 
@@ -116,15 +116,11 @@ const Confirmation: React.FC = () => {
               transition={{ delay: 0.3 }}
               className="mt-6 text-center"
             >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="z-50 w-50 mx-auto"
-              >
-                <source src="/merchant/loader2.webm" type="video/webm" />
-              </video>
+              <img
+                src="/merchant/process.gif"
+                className="aspect-square w-20 mx-auto mb-20"
+              />
+
               <p className="text-gray-500 text-sm mt-1">
                 Please wait while we are preparing things & don't close the
                 page. <br />
@@ -169,7 +165,8 @@ const Confirmation: React.FC = () => {
               <div className="flex flex-col">
                 <span className="font-medium text-muted-foreground">Fee</span>
                 <span className="font-semibold uppercase">
-                  {((data.amount * data.fees) / 100).toFixed(6)} {data.type.toUpperCase()}
+                  {((data.amount * data.fees) / 100).toFixed(6)}{" "}
+                  {data.type.toUpperCase()}
                 </span>
               </div>{" "}
               <div className="flex flex-col">
@@ -177,7 +174,8 @@ const Confirmation: React.FC = () => {
                   Total Amount Deduction
                 </span>
                 <span className="font-semibold uppercase">
-                  {(((data.amount * data.fees) / 100) + data.amount).toFixed(6)} {data.type.toUpperCase()}
+                  {((data.amount * data.fees) / 100 + data.amount).toFixed(6)}{" "}
+                  {data.type.toUpperCase()}
                 </span>
               </div>
               <div className="flex flex-col">
