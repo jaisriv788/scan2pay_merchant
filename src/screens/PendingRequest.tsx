@@ -58,7 +58,7 @@ const PendingRequest: React.FC = () => {
           },
         }
       );
-      console.log(response?.data?.data?.pendingOrders )
+      console.log(response?.data?.data?.pendingOrders);
       setData(response?.data?.data?.pendingOrders || []);
     } catch (err) {
       console.error("Pending fetch failed:", err);
@@ -144,13 +144,14 @@ const PendingRequest: React.FC = () => {
       showError("Error", "Something went wrong while clearing the last order.");
     } finally {
       setLoadingBtn(false);
+      setShow(true);
     }
   }
 
-  useEffect(() => {
-    handleClearRequest();
-    setShow(true);
-  }, []);
+  // useEffect(() => {
+  //   handleClearRequest();
+  //   setShow(true);
+  // }, []);
 
   return (
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">

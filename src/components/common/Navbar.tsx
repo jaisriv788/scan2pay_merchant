@@ -54,6 +54,7 @@ const Navbar: React.FC = () => {
     "/support": "Support",
     "/wallet": "Wallet",
     "/pending-request": "Pending Request",
+    "/processing-request": "Processing Request",
     "/funds-detail": "Funds Details",
   };
 

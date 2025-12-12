@@ -8,7 +8,11 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoLogOut } from "react-icons/io5";
 import { RiTwitterXFill } from "react-icons/ri";
 import { FaTelegramPlane } from "react-icons/fa";
-import { MdDashboard, MdOutlinePendingActions } from "react-icons/md";
+import {
+  MdBorderColor,
+  MdDashboard,
+  MdOutlinePendingActions,
+} from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { GiReceiveMoney } from "react-icons/gi";
 import { BiWallet } from "react-icons/bi";
@@ -37,10 +41,18 @@ const Sidebar: React.FC = () => {
     },
     {
       id: 5,
-      icon: MdOutlinePendingActions,
+      icon: MdBorderColor,
       tag: "Orders",
       click: () => {
         navigate("/pending-request");
+      },
+    },
+    {
+      id: 8,
+      icon: MdOutlinePendingActions,
+      tag: "Pending Orders",
+      click: () => {
+        navigate("/processing-orders");
       },
     },
     {

@@ -24,6 +24,9 @@ const ScanConfirmation = React.lazy(() => import("./screens/ScanConfirmation"));
 const OrderDetails = React.lazy(() => import("./screens/OrderDetails"));
 const PendingRequest = React.lazy(() => import("./screens/PendingRequest"));
 const Funds = React.lazy(() => import("./screens/Funds"));
+const ProcessingRequests = React.lazy(
+  () => import("./screens/ProcessingRequest")
+);
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -80,6 +83,7 @@ const App: React.FC = () => {
             />
             <Route path="/funds-detail" element={<Funds />} />
             <Route path="/pending-request" element={<PendingRequest />} />
+            <Route path="/processing-orders" element={<ProcessingRequests />} />
           </Route>
         </Routes>
       </React.Suspense>

@@ -1,103 +1,3 @@
-// import type { RootState } from "@/store/store";
-// import axios from "axios";
-// import React, { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { useNavigate, useParams } from "react-router";
-
-// const ScanConfirmation: React.FC = () => {
-//   const [loading, setLoading] = useState(true);
-//   const [data, setData] = useState(null);
-
-//   const navigate = useNavigate();
-
-//   const { inr, usdt, order_id } = useParams<{
-//     inr: string;
-//     usdt: string;
-//     order_id: string;
-//   }>();
-
-//   const tokenHeader = useSelector((state: RootState) => state?.user?.token);
-//   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
-
-//   // --- Polling logic ---
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.post(
-//           `${baseUrl}/merchant/get-scan-details`,
-//           { order_id },
-//           {
-//             headers: {
-//               Authorization: `Bearer ${tokenHeader}`,
-//               "Content-Type": "application/json",
-//             },
-//           }
-//         );
-//         console.log("Response data:", response.data);
-//         if (response.data.status) {
-//           setData(response.data.data);
-//           setLoading(false);
-//           clearInterval(interval);
-//         }
-//       } catch (err) {
-//         console.error("Error fetching:", err);
-//         setLoading(false);
-//         navigate("dashboard");
-//       }
-//     };
-
-//     // Poll every 2 seconds
-//     const interval = setInterval(fetchData, 2000);
-
-//     return () => clearInterval(interval);
-//   }, []);
-
-//   // --- Loader Page ---
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-//         <div className="loader mb-4"></div>
-//         <p className="text-slate-600 text-lg">Please wait ...</p>
-
-//         {/* Simple CSS loader */}
-//         <style>
-//           {`
-//             .loader {
-//               border: 4px solid #e2e8f0;
-//               border-top: 4px solid #0f172a;
-//               border-radius: 50%;
-//               width: 40px;
-//               height: 40px;
-//               animation: spin 1s linear infinite;
-//             }
-//             @keyframes spin {
-//               0% { transform: rotate(0deg); }
-//               100% { transform: rotate(360deg); }
-//             }
-//           `}
-//         </style>
-//       </div>
-//     );
-//   }
-
-//   // --- Final Page After Data Arrives ---
-//   return (
-//     <div className="min-h-screen flex items-start justify-center bg-slate-50 py-18">
-//       <div>
-//         <h1 className="text-2xl font-semibold text-slate-800 mb-4">
-//           Scan Confirmation
-//         </h1>
-
-//         <pre className="bg-white p-4 rounded-xl shadow text-sm text-slate-700">
-//           {JSON.stringify(data, null, 2)}
-//         </pre>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ScanConfirmation;
-
 import type { AppDispatch, RootState } from "@/store/store";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -159,6 +59,7 @@ const ScanConfirmation: React.FC = () => {
           }
         );
         console.log("Response data:", response.data);
+        setUpiId(response?.data?.data?.merchant_upi_id);
         if (response.data.status) {
           setData(response.data.data.order);
           setLoading(false);
@@ -314,15 +215,18 @@ const ScanConfirmation: React.FC = () => {
               Pay with UPI App
             </button>
           )}
-          <div className="flex items-center bg-slate-100 p-3 rounded-xl border">
-            <span className="flex-1 font-medium text-slate-800 overflow-hidden">
-              {data?.scan_upi}
-            </span>
-            <Button variant="outline" size="icon" onClick={handleCopy}>
-              <Copy className="h-4 w-4" />
-            </Button>
+          <div>
+            {" "}
+            <p className="font-semibold text-sm mb-1">Receiver UPI Id</p>
+            <div className="flex items-center bg-slate-100 p-3 rounded-xl border">
+              <span className="flex-1 font-medium text-slate-800 overflow-hidden">
+                {data?.scan_upi}
+              </span>
+              <Button variant="outline" size="icon" onClick={handleCopy}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-
           {/* <div className="space-y-2">
             <Label>Upload Screenshot</Label>
             <div className="flex items-center gap-3">
@@ -335,7 +239,7 @@ const ScanConfirmation: React.FC = () => {
             </div>
           </div> */}
           <div className="space-y-2">
-            <Label>UPI Id</Label>
+            <Label>Sender UPI Id</Label>
             <Input
               type="text"
               value={upiId}
