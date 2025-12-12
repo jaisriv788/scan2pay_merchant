@@ -53,8 +53,8 @@ const Navbar: React.FC = () => {
     "/profile": "Profile",
     "/support": "Support",
     "/wallet": "Wallet",
-    "/pending-request": "Pending Request",
-    "/processing-request": "Processing Request",
+    "/pending-request": "Requests",
+    "/processing-orders": "Processing Requests",
     "/funds-detail": "Funds Details",
   };
 
@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(
-      () => setShowSelling((prev) => (prev == 3 ? 0 : prev + 1)),
+      () => setShowSelling((prev) => (prev == 1 ? 0 : prev + 1)),
       3500
     );
     return () => clearInterval(interval);
@@ -219,7 +219,7 @@ const Navbar: React.FC = () => {
                     </motion.span>
                   )}
 
-                  {showSelling === 2 && (
+                  {/* {showSelling === 2 && (
                     <motion.span
                       key="usdcSell"
                       initial={{ y: -20, opacity: 0 }}
@@ -230,9 +230,9 @@ const Navbar: React.FC = () => {
                     >
                       USDC Selling Price - ₹{sellingPriceUSDC}
                     </motion.span>
-                  )}
+                  )} */}
 
-                  {showSelling === 3 && (
+                  {/* {showSelling === 3 && (
                     <motion.span
                       key="usdcBuy"
                       initial={{ y: -20, opacity: 0 }}
@@ -243,7 +243,7 @@ const Navbar: React.FC = () => {
                     >
                       USDC Buying Price - ₹{buyingPriceUSDC}
                     </motion.span>
-                  )}
+                  )} */}
                 </AnimatePresence>
               </div>
             </ShimmerButton>

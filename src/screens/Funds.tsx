@@ -53,30 +53,30 @@ const Funds: React.FC = () => {
             value: data?.inr ? `₹ ${data?.inr?.scan.toFixed(4)}` : "₹ 0.0000",
           },
 
-          {
-            title: "Total USDC",
-            value: data?.usdc
-              ? `${data?.usdc?.total.toFixed(4)} USDC`
-              : "0.0000 USDC",
-          },
-          {
-            title: "Buy USDC Amount",
-            value: data?.usdc
-              ? `${data?.usdc?.total.toFixed(4)} USDC`
-              : "0.0000 USDC",
-          },
-          {
-            title: "Sell USDC Amount",
-            value: data?.usdc
-              ? `${data?.usdc?.total.toFixed(4)} USDC`
-              : "0.0000 USDC",
-          },
-          {
-            title: "Scan&Pay USDC Amount",
-            value: data?.usdc
-              ? `${data?.usdc?.total.toFixed(4)} USDC`
-              : "0.0000 USDC",
-          },
+          // {
+          //   title: "Total USDC",
+          //   value: data?.usdc
+          //     ? `${data?.usdc?.total.toFixed(4)} USDC`
+          //     : "0.0000 USDC",
+          // },
+          // {
+          //   title: "Buy USDC Amount",
+          //   value: data?.usdc
+          //     ? `${data?.usdc?.total.toFixed(4)} USDC`
+          //     : "0.0000 USDC",
+          // },
+          // {
+          //   title: "Sell USDC Amount",
+          //   value: data?.usdc
+          //     ? `${data?.usdc?.total.toFixed(4)} USDC`
+          //     : "0.0000 USDC",
+          // },
+          // {
+          //   title: "Scan&Pay USDC Amount",
+          //   value: data?.usdc
+          //     ? `${data?.usdc?.total.toFixed(4)} USDC`
+          //     : "0.0000 USDC",
+          // },
 
           {
             title: "Total USDT",

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router";
 import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
@@ -27,6 +27,7 @@ const Funds = React.lazy(() => import("./screens/Funds"));
 const ProcessingRequests = React.lazy(
   () => import("./screens/ProcessingRequest")
 );
+const Verify = React.lazy(() => import("./screens/Verify"));
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -55,15 +56,14 @@ const App: React.FC = () => {
       <TrxError open={showTrxFail} />
       <React.Suspense
         fallback={
-          <div className="flex items-center justify-center text-xl font-semibold">
-            Loading...
-          </div>
+          <div className="flex items-center justify-center text-xl font-semibold"></div>
         }
       >
         <Routes>
           <Route element={<PublicRoute />}>
             <Route path="/" element={<Login />} />
             <Route path="/auth/verification" element={<Verification />} />
+            <Route path="/verify-merchant" element={<Verify />} />
           </Route>
 
           <Route element={<ProtectedRoute />}>

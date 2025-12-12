@@ -7,8 +7,8 @@ const Login: React.FC = () => {
     <div className="flex min-h-screen ">
       <div className="flex flex-col justify-center items-center flex-1 sm:min-h-screen max-w-lg mx-auto">
         <div className="flex flex-col items-center">
-          <div className=" text-2xl font-extrabold flex gap-2 items-center">
-            <img className="logo" src="icon.jpeg" alt="icon" width={60} />
+          <div className="flex text-2xl font-extrabold items-center">
+            <img className="logo" src="three.png" alt="icon" width={100} />
             <TextAnimate>Scan2Pay Merchant</TextAnimate>
           </div>
           <TextAnimate className="font-semibold mt-3">

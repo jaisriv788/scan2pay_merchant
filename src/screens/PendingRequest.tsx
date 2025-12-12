@@ -38,8 +38,8 @@ const PendingRequest: React.FC = () => {
   const [sortType, setSortType] = React.useState("default");
   const [typeFilter, setTypeFilter] = React.useState("all"); // <-- NEW
   const [loading, setLoading] = React.useState(false);
-  const [loadingBtn, setLoadingBtn] = React.useState(false);
-  const [show, setShow] = React.useState(false);
+  // const [loadingBtn, setLoadingBtn] = React.useState(false);
+  // const [show, setShow] = React.useState(false);
   const { showSuccess } = useShowSuccess();
   const { showError } = useShowError();
 
@@ -119,34 +119,34 @@ const PendingRequest: React.FC = () => {
     return 0;
   });
 
-  async function handleClearRequest() {
-    try {
-      setLoadingBtn(true);
+  // async function handleClearRequest() {
+  //   try {
+  //     setLoadingBtn(true);
 
-      await axios.post(
-        `${baseUrl}/merchant/reject-accepted-order`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  //     await axios.post(
+  //       `${baseUrl}/merchant/reject-accepted-order`,
+  //       {},
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      if (show)
-        showSuccess(
-          "Success",
-          "Successfully cleared the last order. Now you can accept orders again."
-        );
-    } catch (error) {
-      console.log(error);
-      showError("Error", "Something went wrong while clearing the last order.");
-    } finally {
-      setLoadingBtn(false);
-      setShow(true);
-    }
-  }
+  //     if (show)
+  //       showSuccess(
+  //         "Success",
+  //         "Successfully cleared the last order. Now you can accept orders again."
+  //       );
+  //   } catch (error) {
+  //     console.log(error);
+  //     showError("Error", "Something went wrong while clearing the last order.");
+  //   } finally {
+  //     setLoadingBtn(false);
+  //     setShow(true);
+  //   }
+  // }
 
   // useEffect(() => {
   //   handleClearRequest();
@@ -157,13 +157,13 @@ const PendingRequest: React.FC = () => {
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
       {/* FILTER UI */}
       <div className="flex flex-col h-fit items-center sm:flex-row justify-between gap-3">
-        <Button
+        {/* <Button
           onClick={handleClearRequest}
           disabled={loadingBtn}
           className="hover:bg-[#4D43EF]/70 flex-1 w-full bg-[#4D43EF] cursor-pointer transition ease-in-out duration-300"
         >
           {loadingBtn ? "Clearing Order ..." : "Clear Last Order"}
-        </Button>
+        </Button> */}
 
         {/* SORT SELECT */}
         <select

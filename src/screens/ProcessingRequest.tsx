@@ -33,13 +33,14 @@ const ProcessingRequest: React.FC = () => {
   const [data, setData] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [loading2, setLoading2] = React.useState(false);
+  const [id, setId] = useState("");
 
   async function handleApprove(orderid) {
     try {
       setLoading2(true);
-
+      setId(orderid);
       const response = await axios.post(
-        `${baseUrl}/merchant/incomplete-orders`,
+        `${baseUrl}/merchant/confirm-payment`,
         { order_id: orderid },
         {
           headers: {
@@ -54,6 +55,7 @@ const ProcessingRequest: React.FC = () => {
       console.log(error);
     } finally {
       setLoading2(false);
+      setId("");
     }
   }
 
@@ -86,7 +88,7 @@ const ProcessingRequest: React.FC = () => {
   return (
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
       <div className="w-full rounded-xl border p-4 shadow-sm bg-white overflow-x-auto">
-        <h2 className="text-lg font-semibold mb-4">Pending Requests</h2>
+        {/* <h2 className="text-lg font-semibold mb-4">Pending Requests</h2> */}
 
         <Table>
           <TableHeader>
@@ -133,10 +135,13 @@ const ProcessingRequest: React.FC = () => {
                   <TableCell className="text-right">
                     <Button
                       size="sm"
+                      disabled={loading2}
                       onClick={() => handleApprove(item.order_id)}
                       className="cursor-pointer transition ease-in-out duration-300 hover:bg-[#4D43EF]/70 bg-[#4D43EF]"
                     >
-                      {loading2 ? "Please Wait..." : "Accept"}
+                      {loading2 && id == item.order_id
+                        ? "Please Wait..."
+                        : "Accept Order"}
                     </Button>
                   </TableCell>
                 </TableRow>

@@ -23,7 +23,7 @@ export default defineConfig({
         "apple-touch-icon.png",
       ],
       manifest: {
-        name: "Scan2Pay Direct Merchant",
+        name: "scan2pay.Mer",
         short_name: "Scan2Pay",
         description: "Scan2Pay application.",
         theme_color: "#ffffff",

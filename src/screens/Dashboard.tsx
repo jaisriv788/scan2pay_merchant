@@ -2,7 +2,7 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MagicCard } from "@/components/ui/magic-card";
 import type { RootState } from "@/store/store";
 import axios from "axios";
-import { Sparkles, Wallet, CircleDollarSign, Receipt } from "lucide-react";
+import { Sparkles, Wallet, Receipt } from "lucide-react";
 import { useEffect, useState } from "react";
 // import type { Root } from "react-dom/client";
 import { BiRupee } from "react-icons/bi";
@@ -104,7 +104,7 @@ export default function DashboardPage() {
         </MagicCard>
 
         {/* USDC */}
-        <MagicCard
+        {/* <MagicCard
           gradientColor="#a4f0b0"
           goto="funds-detail"
           className="p-5 cursor-pointer rounded-2xl backdrop-blur-md border border-green-500/40 
@@ -124,7 +124,7 @@ export default function DashboardPage() {
               $ {data?.usdcAmount.toFixed(4) ?? 0.0}
             </p>
           </CardContent>
-        </MagicCard>
+        </MagicCard> */}
 
         <MagicCard
           goto="funds-detail"

@@ -327,7 +327,7 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="USDT">USDT</SelectItem>
-              <SelectItem value="USDC">USDC</SelectItem>
+              {/* <SelectItem value="USDC">USDC</SelectItem> */}
             </SelectContent>
           </Select>
         </div>

@@ -204,7 +204,13 @@ export function LoginDialog() {
         isMerchant: 1,
       });
 
-      // console.log(response.data);
+      console.log(response.data);
+
+      if (response.data.status === "verification_required") {
+        navigate("/verify-merchant");
+        dispatch(setUserData({ userData: response.data.data }));
+        return;
+      }
 
       if (response.data.status !== "success") {
         showError("Verification Failed", response.data.message);
@@ -217,8 +223,14 @@ export function LoginDialog() {
       dispatch(setIsUserConnected({ isConnected: true }));
       navigate("/dashboard");
     } catch (error) {
-      showError("Verification Failed", "");
       console.log(error);
+
+      if (error.response.data.redirect === "verification_pending") {
+        navigate("/verify-merchant");
+        dispatch(setUserData({ userData: error.response.data.data }));
+        return;
+      }
+      showError("Verification Failed", "");
     } finally {
       setEmailVerificationLoader(false);
       setOtp("");
