@@ -87,26 +87,28 @@ const Funds: React.FC = () => {
           {
             title: "Buy USDT Amount",
             value: data?.usdt
-              ? `${data?.usdt?.total.toFixed(4)} USDT`
+              ? `${data?.usdt?.buy.toFixed(4)} USDT`
               : "0.0000 USDT",
           },
           {
             title: "Sell USDT Amount",
             value: data?.usdt
-              ? `${data?.usdt?.total.toFixed(4)} USDT`
+              ? `${data?.usdt?.sell.toFixed(4)} USDT`
               : "0.0000 USDT",
           },
           {
             title: "Scan&Pay USDT Amount",
             value: data?.usdt
-              ? `${data?.usdt?.total.toFixed(4)} USDT`
+              ? `${data?.usdt?.scan.toFixed(4)} USDT`
               : "0.0000 USDT",
           },
 
-          // { title: "Total USDT", value: "1200 USDT" },
-          // { title: "Buy USDT Amount", value: "540 USDT" },
-          // { title: "Sell USDT Amount", value: "3800 USDT" },
-          // { title: "Scan&Pay USDT Amount", value: "15200 USDT" },
+          {
+            title: "Freezed USDT Amount",
+            value: data?.usdt
+              ? `${data?.usdt?.frozen.toFixed(4)} USDT`
+              : "0.0000 USDT",
+          },
         ].map((item, i) => (
           <div
             key={i}

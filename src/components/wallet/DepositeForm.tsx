@@ -100,7 +100,11 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
         }
       );
 
-      console.log(response);
+      console.log(response.data);
+      if (response.data.status == "false") {
+        showError("Withdraw Failed.", response?.data?.message);
+        return;
+      }
       showSuccess("Withdraw Successful.", "");
       setReceiverAddress("");
       setAmount2("");

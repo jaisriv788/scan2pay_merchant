@@ -34,6 +34,7 @@ const ProcessingRequest: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loading2, setLoading2] = React.useState(false);
   const [id, setId] = useState("");
+  const [count, setCount] = useState(0);
 
   async function handleApprove(orderid) {
     try {
@@ -51,6 +52,7 @@ const ProcessingRequest: React.FC = () => {
       );
 
       console.log(response.data);
+      setCount((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     } finally {
@@ -64,7 +66,7 @@ const ProcessingRequest: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.post(
-          `${baseUrl}/merchant/other-pending-orders`,
+          `${baseUrl}/merchant/incomplete-orders`,
           {},
           {
             headers: {
@@ -73,8 +75,8 @@ const ProcessingRequest: React.FC = () => {
             },
           }
         );
-        console.log(response?.data?.data?.pendingOrders);
-        setData(response?.data?.data?.pendingOrders || []);
+        console.log(response?.data?.data?.incompleteOrders);
+        setData(response?.data?.data?.incompleteOrders || []);
       } catch (err) {
         console.error("Pending fetch failed:", err);
       } finally {
@@ -83,7 +85,7 @@ const ProcessingRequest: React.FC = () => {
     };
 
     fetchPending();
-  }, []);
+  }, [count]);
 
   return (
     <div className="mt-18 px-2 flex flex-col gap-4 max-w-lg mx-auto">
@@ -141,7 +143,7 @@ const ProcessingRequest: React.FC = () => {
                     >
                       {loading2 && id == item.order_id
                         ? "Please Wait..."
-                        : "Accept Order"}
+                        : "Approve Order"}
                     </Button>
                   </TableCell>
                 </TableRow>

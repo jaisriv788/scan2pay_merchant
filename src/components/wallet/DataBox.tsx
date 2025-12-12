@@ -82,7 +82,7 @@ const DataBox: React.FC<DepositeFormProps> = ({ setBalance }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-          <div className="sm:col-span-2 grid grid-cols-2 xs:grid-cols-2 gap-4">
+          <div className="sm:col-span-2 grid grid-cols-1 xs:grid-cols-1 gap-4">
             <div className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-4">
               <div className="font-extrabold text-2xl sm:text-3xl text-gray-100">
                 ${data ? data.usdtAmount.toFixed(4) : "0.0000"}
@@ -92,14 +92,14 @@ const DataBox: React.FC<DepositeFormProps> = ({ setBalance }) => {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-4">
+            {/* <div className="bg-white/10 backdrop-blur-md rounded-lg p-3 sm:p-4">
               <div className="font-extrabold text-2xl sm:text-3xl text-gray-100">
                 ${data ? data.usdcAmount.toFixed(4) : "0.0000"}
               </div>
               <div className="text-xs sm:text-sm font-semibold text-gray-200 mt-1">
                 USDC Holding
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
