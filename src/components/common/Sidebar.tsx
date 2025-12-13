@@ -17,6 +17,7 @@ import { CgProfile } from "react-icons/cg";
 import { GiReceiveMoney } from "react-icons/gi";
 import { BiWallet } from "react-icons/bi";
 // import { IoMdSettings } from "react-icons/io";
+import { GrTransaction } from "react-icons/gr";
 import { FaArrowRightLong } from "react-icons/fa6";
 import useOnlineStatus from "@/hooks/useOnlineStatus";
 import { ImConnection } from "react-icons/im";
@@ -73,7 +74,7 @@ const Sidebar: React.FC = () => {
     },
     {
       id: 3,
-      icon: GiReceiveMoney,
+      icon: GrTransaction,
       tag: "Transactions",
       click: () => {
         navigate("/transactions");
@@ -82,7 +83,7 @@ const Sidebar: React.FC = () => {
 
     {
       id: 7,
-      icon: BiWallet,
+      icon: GiReceiveMoney,
       tag: "Funds Detail",
       click: () => {
         navigate("/funds-detail");

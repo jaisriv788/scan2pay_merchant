@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import { Routes, Route, useLocation } from "react-router";
 import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
