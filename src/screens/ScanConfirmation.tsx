@@ -21,6 +21,7 @@ const ScanConfirmation: React.FC = () => {
   //   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [upiId, setUpiId] = useState("");
   const [fees, setFees] = useState<number>(0);
+  // const [showloader, setShowLoader] = useState(false);
 
   const navigate = useNavigate();
   const { showSuccess } = useShowSuccess();
