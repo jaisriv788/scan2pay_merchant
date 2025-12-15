@@ -28,6 +28,9 @@ const ProcessingRequests = React.lazy(
   () => import("./screens/ProcessingRequest")
 );
 const Verify = React.lazy(() => import("./screens/Verify"));
+// const Dispute = React.lazy(() => import("./screens/Dispute"));
+const DisputeStatus = React.lazy(() => import("./screens/DisputeStatus"));
+const DisputeForm = React.lazy(() => import("./screens/DisputeForm"));
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -84,6 +87,9 @@ const App: React.FC = () => {
             <Route path="/funds-detail" element={<Funds />} />
             <Route path="/pending-request" element={<PendingRequest />} />
             <Route path="/processing-orders" element={<ProcessingRequests />} />
+            {/* <Route path="/dispute" element={<Dispute />} /> */}
+            <Route path="/dispute-details" element={<DisputeStatus />} />
+            <Route path="/dispute-form" element={<DisputeForm />} />
           </Route>
         </Routes>
       </React.Suspense>

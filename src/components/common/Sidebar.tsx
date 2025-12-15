@@ -11,7 +11,9 @@ import { FaTelegramPlane } from "react-icons/fa";
 import {
   MdBorderColor,
   MdDashboard,
+  // MdFormatListBulletedAdd,
   MdOutlinePendingActions,
+  // MdReportProblem,
 } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { GiReceiveMoney } from "react-icons/gi";
@@ -90,19 +92,11 @@ const Sidebar: React.FC = () => {
       },
     },
     // {
-    //   id: 4,
-    //   icon: BiSupport,
-    //   tag: "Help & Support",
+    //   id: 9,
+    //   icon: MdFormatListBulletedAdd,
+    //   tag: "Dispute Status",
     //   click: () => {
-    //     navigate("/support");
-    //   },
-    // },
-    // {
-    //   id: 5,
-    //   icon: IoMdSettings,
-    //   tag: "Settings",
-    //   click: () => {
-    //     navigate("/settings");
+    //     navigate("/dispute-details");
     //   },
     // },
     {
@@ -166,7 +160,7 @@ const Sidebar: React.FC = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           onClick={handleClose}
-          className="absolute inset-0 z-40 bg-black/40 backdrop-blur-md"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-md"
         >
           <motion.div
             key="sidebar"
@@ -175,7 +169,7 @@ const Sidebar: React.FC = () => {
             exit={{ x: -80, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#E5E5E5] border-r slider border-gray-300 h-full top-0  w-75 flex flex-col"
+            className="bg-[#E5E5E5] border-r slider border-gray-300 h-full top-0  w-75 flex flex-col overflow-y-auto"
           >
             <div className="px-5 py-5 md:py-4 border-b border-gray-300 flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -188,7 +182,7 @@ const Sidebar: React.FC = () => {
               />
               {/* <ThemeSwitcher /> */}
             </div>
-            <div className="flex-1 py-5 md:py-4 flex flex-col gap-2">
+            <div className="flex-1 py-5 md:py-3 flex flex-col gap-2">
               {Data.map((item, index) => {
                 return (
                   <div
