@@ -78,7 +78,7 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
       );
 
       console.log(response.data);
-      if (response.data.status == "false") {
+      if (!response.data.status) {
         showError("Withdraw Failed.", response?.data?.message);
         return;
       }
