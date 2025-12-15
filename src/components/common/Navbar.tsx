@@ -71,7 +71,6 @@ const Navbar: React.FC = () => {
   if (location.pathname.startsWith("/scan-confirmation")) {
     title = "Scan Confirmation";
   }
-
   if (location.pathname.startsWith("/order")) {
     title = "Orders " + order_id;
   }

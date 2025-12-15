@@ -25,9 +25,10 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
   const [type, setType] = useState("USDT");
   // const [amount, setAmount] = useState("");
   const [amount2, setAmount2] = useState("");
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [receiverAddress, setReceiverAddress] = useState("");
+  const [otp, setOtp] = useState("");
 
   const baseUrl = useSelector((state: RootState) => state?.consts?.baseUrl);
   const userData = useSelector((state: RootState) => state?.user?.userData);
@@ -35,31 +36,6 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
 
   const { showError } = useShowError();
   const { showSuccess } = useShowSuccess();
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.post(
-  //       `${baseUrl}/merchant/update-crypto-balance`,
-  //       {
-  //         type: type.toLocaleLowerCase(),
-  //         amount,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //     setAmount("");
-  //   }
-  // };
 
   const handleSubmit2 = async () => {
     try {
@@ -91,6 +67,7 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
           amount: amount2,
           from_wallet_address: String(userData?.wallet_address || ""),
           to_wallet_address: receiverAddress,
+          otp,
         },
         {
           headers: {
@@ -116,131 +93,32 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
     }
   };
 
+  async function handleOtpSend() {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${baseUrl}/get-withdraw-otp`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+      if (response.data.status) {
+        showSuccess("Otp Sent.", "");
+      }
+    } catch (error) {
+      console.log(error);
+      showError("Error", "Error occured while sending the otp.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    // <>
-    //   <div className="flex flex-col gap-5 p-4 rounded-xl border shadow-sm bg-white">
-    //     {/* Amount + Select row */}
-    //     <div className="text-2xl font-bold">Deposite Amount</div>
-    //     {/* <div className="flex gap-3">
-    //       <Input
-    //         type="number"
-    //         placeholder="Enter Amount"
-    //         value={amount}
-    //         onChange={(e) => setAmount(e.target.value)}
-    //         className="flex-1"
-    //       />
-
-    //       <Select onValueChange={(val) => setType(val)} defaultValue={type}>
-    //         <SelectTrigger className="w-[110px]">
-    //           <SelectValue placeholder="Type" />
-    //         </SelectTrigger>
-    //         <SelectContent>
-    //           <SelectItem value="USDT">USDT</SelectItem>
-    //           <SelectItem value="USDC">USDC</SelectItem>
-    //         </SelectContent>
-    //       </Select>
-    //     </div> */}
-
-    //     <div className="mt-5 text-gray-700 text-sm flex flex-col items-center">
-    //       <QRCodeCanvas
-    //         value={
-    //           userData?.wallet_address ? String(userData.wallet_address) : ""
-    //         }
-    //         size={200}
-    //         bgColor="transparent"
-    //         fgColor="#000000"
-    //         level="H"
-    //         includeMargin={true}
-    //       />
-    //       <span className="self-start font-semibold text-[16px] mt-5">
-    //         Wallet Address
-    //       </span>
-    //       <div className="flex justify-between items-center bg-[#dad8f8] rounded-lg w-full px-5 py-2">
-    //         <span className="font-semibold">
-    //           {userData?.wallet_address.toString().slice(0, 14) +
-    //             "..." +
-    //             userData?.wallet_address.toString().slice(-14)}
-    //         </span>
-    //         <CopyIcon
-    //           size={15}
-    //           className="hover:text-[#4D43EF] cursor-pointer transition ease-in-out duration-300"
-    //           onClick={() => {
-    //             navigator.clipboard
-    //               .writeText(
-    //                 userData?.wallet_address
-    //                   ? String(userData.wallet_address)
-    //                   : ""
-    //               )
-    //               .then(() => {
-    //                 alert("Address copied to clipboard!");
-    //               })
-    //               .catch((err) => {
-    //                 console.error("Failed to copy: ", err);
-    //               });
-    //           }}
-    //         />
-    //       </div>
-    //       <div className="py-2 px-4 mt-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md">
-    //         <p className="font-semibold">Note:</p>
-    //         <ul className="list-disc list-inside mt-1">
-    //           <li>
-    //             Scan the QR code using your wallet/copy the wallet address,
-    //             submit the payment amount, and allow some time for your balance
-    //             to update.
-    //           </li>
-    //         </ul>
-    //       </div>
-    //     </div>
-    //     {/* Submit Button */}
-    //     {/* <Button
-    //       onClick={handleSubmit}
-    //       disabled={loading || !amount}
-    //       className="bg-[#847EF1] cursor-pointer transition ease-in-out duration-300 hover:bg-[#847EF1]/50 text-white font-medium"
-    //     >
-    //       {loading ? "Loading..." : "Add To Wallet"}
-    //     </Button> */}
-    //   </div>
-    //   <div className="flex flex-col gap-5 p-4 rounded-xl border shadow-sm bg-white">
-    //     {/* Amount + Select row */}
-    //     <div className="text-2xl font-bold">Withdraw Amount</div>
-    //     <div className="flex gap-3">
-    //       {/* Amount Input */}
-    //       <Input
-    //         type="number"
-    //         placeholder="Enter Amount"
-    //         value={amount2}
-    //         onChange={(e) => setAmount2(e.target.value)}
-    //         className="flex-1"
-    //       />
-
-    //       {/* Select Dropdown */}
-    //       <Select onValueChange={(val) => setType(val)} defaultValue={type}>
-    //         <SelectTrigger className="w-[110px]">
-    //           <SelectValue placeholder="Type" />
-    //         </SelectTrigger>
-    //         <SelectContent>
-    //           <SelectItem value="USDT">USDT</SelectItem>
-    //           <SelectItem value="USDC">USDC</SelectItem>
-    //         </SelectContent>
-    //       </Select>
-    //     </div>
-    //     <Input
-    //       type="text"
-    //       placeholder="Enter Address"
-    //       value={receiverAddress}
-    //       onChange={(e) => setReceiverAddress(e.target.value)}
-    //       className="flex-1"
-    //     />
-    //     {/* Submit Button */}
-    //     <Button
-    //       onClick={handleSubmit2}
-    //       disabled={loading2 || !amount2}
-    //       className="bg-[#847EF1] cursor-pointer transition ease-in-out duration-300 hover:bg-[#847EF1]/50 text-white font-medium"
-    //     >
-    //       {loading2 ? "Loading..." : "Withdraw from Wallet"}
-    //     </Button>
-    //   </div>
-    // </>
     <>
       <div className="flex flex-col gap-6 p-6 rounded-2xl border shadow-md bg-white w-full max-w-xl mx-auto">
         <div className="text-3xl font-bold text-gray-800 mb-2 border-b pb-2">
@@ -343,7 +221,21 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
           onChange={(e) => setReceiverAddress(e.target.value)}
           className="flex-1 rounded-lg border shadow-sm"
         />
-
+        <div className="mt-2 flex gap-1">
+          <Input
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Enter the Otp..."
+            className="flex-1 text-[#4D43EF] font-semibold"
+          />
+          <button
+            onClick={handleOtpSend}
+            disabled={loading}
+            className="bg-[#4D43EF] text-white rounded-lg px-2 hover:bg-[#4D43EF]/80 cursor-pointer transition ease-in-out duration-300"
+          >
+            {loading ? "Sending.." : "Send Otp"}
+          </button>
+        </div>
         <Button
           onClick={handleSubmit2}
           disabled={loading2 || !amount2}

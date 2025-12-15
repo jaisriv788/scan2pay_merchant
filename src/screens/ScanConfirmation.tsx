@@ -18,7 +18,7 @@ const ScanConfirmation: React.FC = () => {
   const [data, setData] = useState(null);
   const [note, setNote] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
-  //   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [upiId, setUpiId] = useState("");
   const [fees, setFees] = useState<number>(0);
   // const [showloader, setShowLoader] = useState(false);
@@ -97,9 +97,16 @@ const ScanConfirmation: React.FC = () => {
       setBtnLoading(true);
       const formData = new FormData();
 
+      console.log({ uploadedImage });
+
+      if (!uploadedImage) {
+        showError("Please provide screenshot as proof.", "");
+        return;
+      }
+
       formData.append("order_id", order_id);
       formData.append("upi_reference", note);
-      // formData.append("screenshot", uploadedImage);
+      formData.append("screenshot", uploadedImage);
       formData.append("upi_id", upiId);
 
       const response = await axios.post(
@@ -108,7 +115,7 @@ const ScanConfirmation: React.FC = () => {
         {
           headers: {
             Authorization: `Bearer ${tokenHeader}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -228,7 +235,7 @@ const ScanConfirmation: React.FC = () => {
               </Button>
             </div>
           </div>
-          {/* <div className="space-y-2">
+          <div className="space-y-2">
             <Label>Upload Screenshot</Label>
             <div className="flex items-center gap-3">
               <Input
@@ -238,7 +245,7 @@ const ScanConfirmation: React.FC = () => {
                 className="cursor-pointer"
               />
             </div>
-          </div> */}
+          </div>
           <div className="space-y-2">
             <Label>Sender UPI Id</Label>
             <Input

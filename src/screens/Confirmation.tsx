@@ -6,7 +6,7 @@ import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
@@ -18,6 +18,7 @@ const Confirmation: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [loading2, setLoading2] = React.useState(false);
   const [data, setData] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -92,6 +93,25 @@ const Confirmation: React.FC = () => {
 
   return (
     <>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="relative bg-white rounded-lg p-8 max-w-3xl w-full mx-4">
+            {/* Close button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-2 transition ease-in-out duration-300 font-bold cursor-pointer right-2 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+
+            <img
+              src={data.payment_screenshot}
+              alt="Payment Screenshot"
+              className="w-full h-auto rounded-md"
+            />
+          </div>
+        </div>
+      )}
       {loading ? (
         <div className="mt-24 px-3 flex flex-col gap-8 max-w-lg mx-auto min-h-[600px] ">
           <motion.div
@@ -190,6 +210,23 @@ const Confirmation: React.FC = () => {
                 </span>
                 <span className="font-semibold">
                   ₹ {data.inr_amount ?? "-"}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-muted-foreground">
+                  Proof (Screenshot)
+                </span>
+                <span className="font-semibold">
+                  {data.payment_screenshot ? (
+                    <button
+                      onClick={() => setOpen(true)}
+                      className="font-semibold flex items-center text-blue-600 hover:underline text-left"
+                    >
+                      Open <ExternalLink size={16} />
+                    </button>
+                  ) : (
+                    <span className="font-semibold">-</span>
+                  )}
                 </span>
               </div>
             </div>

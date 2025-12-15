@@ -48,8 +48,8 @@ const SellConfirmation: React.FC = () => {
 
   const [transactionId, setTransactionId] = useState<string>("");
   const [upiId, setUpiId] = useState<string>("");
-  // const [imageFile, setImageFile] = useState<File | null>(null);
-  // const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
@@ -82,23 +82,23 @@ const SellConfirmation: React.FC = () => {
     window.location.href = upiLink;
   };
 
-  // useEffect(() => {
-  //   if (!imageFile) {
-  //     setImagePreview(null);
-  //     return;
-  //   }
-  //   const reader = new FileReader();
-  //   reader.onload = () => setImagePreview(String(reader.result));
-  //   reader.readAsDataURL(imageFile);
-  //   return () => {
-  //     // cleanup if needed
-  //   };
-  // }, [imageFile]);
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreview(null);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setImagePreview(String(reader.result));
+    reader.readAsDataURL(imageFile);
+    return () => {
+      // cleanup if needed
+    };
+  }, [imageFile]);
 
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0] ?? null;
-  //   setImageFile(file);
-  // };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setImageFile(file);
+  };
 
   const handleCopyUPI = async () => {
     const text = orderData.upi_id ?? "";
@@ -115,15 +115,25 @@ const SellConfirmation: React.FC = () => {
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
+    if (!imageFile) {
+      showError("Please upload a screenshot.", "");
+      return;
+    }
+
+    if (!transactionId.trim()) {
+      showError("Please enter a transaction ID.", "");
+      return;
+    }
+
     try {
       setLoading(true);
       const formData = new FormData();
       formData.append("order_id", orderData?.order_id);
       formData.append("upi_reference", transactionId);
       formData.append("upi_id", upiId);
-      // formData.append("screenshot", imageFile);
+      formData.append("screenshot", imageFile);
 
-      // console.log({ order_id, transactionId, imageFile });
+      console.log({ transactionId, imageFile });
       const response = await axios.post(
         `${baseUrl}/submit-payment-proof`,
         formData,
@@ -187,10 +197,11 @@ const SellConfirmation: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [confirmed]);
+
   return (
     <div className="min-h-screen flex items-start justify-center bg-slate-50 py-12">
       {confirmed && (
-        <div className="absolute inset-0 bg-black/60 flex z-500 justify-center items-center backdrop-blur">
+        <div className="fixed inset-0 bg-black/60 flex z-500 justify-center items-center backdrop-blur">
           {" "}
           <div className="bg-white rounded-lg p-7">
             <img
@@ -328,7 +339,7 @@ const SellConfirmation: React.FC = () => {
                 />
               </div>
 
-              {/* <div>
+              <div>
                 <label className="text-sm font-medium text-gray-600">
                   Upload Screenshot (optional)
                 </label>
@@ -376,10 +387,7 @@ const SellConfirmation: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mt-2">
-                  PNG / JPG — up to 5MB
-                </p>
-              </div> */}
+              </div>
 
               <div className="pt-2">
                 <button
