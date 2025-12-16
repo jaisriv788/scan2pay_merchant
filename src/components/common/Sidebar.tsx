@@ -11,7 +11,7 @@ import { FaTelegramPlane } from "react-icons/fa";
 import {
   MdBorderColor,
   MdDashboard,
-  // MdFormatListBulletedAdd,
+  MdFormatListBulletedAdd,
   MdOutlinePendingActions,
   // MdReportProblem,
 } from "react-icons/md";
@@ -91,14 +91,14 @@ const Sidebar: React.FC = () => {
         navigate("/funds-detail");
       },
     },
-    // {
-    //   id: 9,
-    //   icon: MdFormatListBulletedAdd,
-    //   tag: "Dispute Status",
-    //   click: () => {
-    //     navigate("/dispute-details");
-    //   },
-    // },
+    {
+      id: 9,
+      icon: MdFormatListBulletedAdd,
+      tag: "Dispute Status",
+      click: () => {
+        navigate("/dispute-details");
+      },
+    },
     {
       id: 6,
       icon: ImConnection,

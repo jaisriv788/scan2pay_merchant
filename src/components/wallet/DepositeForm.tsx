@@ -122,7 +122,7 @@ const DepositeForm: React.FC<DepositeFormProps> = ({ balance }) => {
     <>
       <div className="flex flex-col gap-6 p-6 rounded-2xl border shadow-md bg-white w-full max-w-xl mx-auto">
         <div className="text-3xl font-bold text-gray-800 mb-2 border-b pb-2">
-          Deposit Amount
+          Deposit Amount USDT BEP-20
         </div>
 
         <div className="mt-4 text-gray-700 text-sm flex flex-col items-center gap-3">

@@ -58,6 +58,7 @@ const Navbar: React.FC = () => {
     "/funds-detail": "Funds Details",
     "/dispute": "Dispute",
     "/dispute-details": "Dispute Details",
+    "/dispute-form":"Dispute Form"
   };
 
   let title = routeTitles[location.pathname];

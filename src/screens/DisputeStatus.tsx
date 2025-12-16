@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import type { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
 type Order = {
   id: number;
@@ -18,7 +19,7 @@ type Order = {
   user_id?: number;
   amount?: string;
   inr_amount?: number;
-  status?: string;
+  disputed_status?: string;
   type?: string;
   created_at?: string;
   order_type?: string;
@@ -29,50 +30,10 @@ const DisputeStatus: React.FC = () => {
   const baseUrl = useSelector((state: RootState) => state.consts.baseUrl);
   const token = useSelector((state: RootState) => state.user.token);
 
+  const navigate = useNavigate();
+
   const [data, setData] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loading2, setLoading2] = React.useState(false);
-  const [id, setId] = useState("");
-  const [count, setCount] = useState(0);
-
-  async function handleApprove(orderid, type) {
-    try {
-      setLoading2(true);
-      setId(orderid);
-      let response;
-      if (type === "sell") {
-        response = await axios.post(
-          `${baseUrl}/merchant/confirm-payment`,
-          { order_id: orderid },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-      } else {
-        response = await axios.post(
-          `${baseUrl}/approve-scan-order-status`,
-          { order_id: orderid },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-      }
-
-      console.log(response.data);
-      setCount((prev) => prev + 1);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading2(false);
-      setId("");
-    }
-  }
 
   useEffect(() => {
     const fetchPending = async () => {
@@ -88,8 +49,8 @@ const DisputeStatus: React.FC = () => {
             },
           }
         );
-        console.log(response?.data?.data?.incompleteOrders);
-        setData(response?.data?.data?.incompleteOrders || []);
+        console.log(response?.data?.data?.disputedOrders);
+        setData(response?.data?.data?.disputedOrders || []);
       } catch (err) {
         console.error("Pending fetch failed:", err);
       } finally {
@@ -98,7 +59,7 @@ const DisputeStatus: React.FC = () => {
     };
 
     fetchPending();
-  }, [count]);
+  }, []);
 
   return (
     <div className="mt-24 mb-10 px-3 flex flex-col gap-8 max-w-lg mx-auto">
@@ -113,7 +74,7 @@ const DisputeStatus: React.FC = () => {
               <TableHead>Amount</TableHead>
               <TableHead>INR</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -140,26 +101,40 @@ const DisputeStatus: React.FC = () => {
                   <TableCell className="capitalize">
                     {item.order_type}
                   </TableCell>
-                  <TableCell>{parseFloat(item?.amount).toFixed(2)}</TableCell>
+                  <TableCell>
+                    {parseFloat(item?.amount).toFixed(2)}{" "}
+                    {item?.type.toUpperCase()}
+                  </TableCell>
                   <TableCell>₹{item.inr_amount}</TableCell>
-                  <TableCell className="capitalize">{item.status}</TableCell>
+                  <TableCell className="capitalize">
+                    {item.disputed_status}
+                  </TableCell>
                   <TableCell>
                     {new Date(item.created_at).toLocaleString().slice(0, 10)}
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <Button
-                      size="sm"
-                      disabled={loading2}
-                      onClick={() =>
-                        handleApprove(item.order_id, item.order_type)
-                      }
-                      className="cursor-pointer transition ease-in-out duration-300 hover:bg-[#4D43EF]/70 bg-[#4D43EF]"
-                    >
-                      {loading2 && id == item.order_id
-                        ? "Please Wait..."
-                        : "Approve Order"}
-                    </Button>
+                    {item.disputed_status.toLowerCase() == "pending" && (
+                      <Button
+                        size="sm"
+                        onClick={() =>
+                          navigate("/dispute-form", {
+                            state: item,
+                          })
+                        }
+                        className="cursor-pointer transition ease-in-out duration-300 hover:bg-[#4D43EF]/70 bg-[#4D43EF]"
+                      >
+                        Raise Dispute
+                      </Button>
+                    )}
+                    {item.disputed_status.toLowerCase() == "requested" &&
+                      "In Process"}
+
+                    {item.disputed_status.toLowerCase() == "approve" &&
+                      "Refund Approved"}
+
+                    {item.disputed_status.toLowerCase() == "reject" &&
+                      "Refund Rejected"}
                   </TableCell>
                 </TableRow>
               ))
